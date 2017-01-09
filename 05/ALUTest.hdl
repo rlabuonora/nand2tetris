@@ -1,0 +1,25 @@
+CHIP ALUTest {
+
+    IN  instruction[16], // Instruction for execution
+	inDReg[16],
+	inAReg[16];
+
+    OUT outALU[16],        // M value output
+        zero,
+	negative;
+
+
+    PARTS:
+    // Put your code here:
+    Register(in=inDReg, load=true, out=outDReg);
+    Register(in=inAReg, load=true, out=outAReg);
+    ALU(x=outDReg, y=outAReg, zx=instruction[11],
+                       nx=instruction[10], 
+		       zy=instruction[9], 
+		       ny=instruction[8],
+		       f =instruction[7],
+		       no=instruction[6],
+		       out=outALU,
+		       zr=zero,
+		       ng=negative);
+}
