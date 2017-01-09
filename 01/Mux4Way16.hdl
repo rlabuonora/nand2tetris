@@ -17,4 +17,11 @@ CHIP Mux4Way16 {
 
     PARTS:
     // Put your code here:
+    // Important: if sel = 01 sel[0] is 1 & sel[1] is 0!!
+    // sel[0] = 0 --> A o B 
+    // sel[0] = 1 --> C o D
+    Mux16(a=a, b=c, sel=sel[1], out=AorC);
+    Mux16(a=b, b=d, sel=sel[1], out=BorD);
+    Mux16(a=AorC, b=BorD, sel=sel[0], out=out);
+    
 }
