@@ -1,5 +1,5 @@
 var assert = require('assert');
-
+var preprocess = require('../assembler.js').preprocess;
 
 
 describe('Regular expression', function() {
@@ -18,3 +18,59 @@ describe('Regular expression', function() {
         });
     });
 });
+
+
+describe('Removing whitespace', function() {
+
+    it('blank line', function() {
+        var str = "      ";
+        assert.equal(str.trim(), "");
+    });
+
+    it('Leading whitespace', function() {
+        var str = "   ADD 1 + 2";
+        assert.equal(str.trim(), "ADD 1 + 2");
+    });
+
+    it('Trailing whitespace', function() {
+        var str = "ADD 1 + 2    ";
+        assert.equal(str.trim(), "ADD 1 + 2");
+    });
+
+    it('Leading & trailing whitespace', function() {
+        var str = "   ADD 1 + 2    ";
+        assert.equal(str.trim(), "ADD 1 + 2");
+    });
+});
+
+
+describe('Removing whitespace and comments', function() {
+
+    it('an empty line', function() {
+        var str = "";
+        assert.equal(preprocess(str), "");
+    });
+
+    it('a blank line', function() {
+        var str = "      ";
+        assert.equal(preprocess(str), "");
+    });
+
+    it('an instruction ', function() {
+        var str = "ADD 1 + 2";
+        assert.equal(preprocess(str), "ADD 1 + 2");
+    });
+
+
+    it('an instruction with a comment', function() {
+        var str = "ADD 1 + 2  // This is a comment";
+        assert.equal(preprocess(str), "ADD 1 + 2");
+    });
+
+    it('a comment', function() {
+        var str = "// This is a comment";
+        assert.equal(preprocess(str), "");
+    });
+});
+
+
