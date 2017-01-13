@@ -1,2 +1,5 @@
 */*.out
 */*/*.out
+06/assembler/node_modules
+06/assembler/package.json
+
