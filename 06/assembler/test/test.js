@@ -147,5 +147,17 @@ describe("A collection of lines", function() {
     });
 });
 
+describe("Command Type", function() {
+    it("A Command", function() {
+        
+        assert.equal(parser.commandType("@R0"), "A_COMMAND");
+        
+        
+
+    });
+});
 
 
+// 1 is A_COMMAND
+// 2 is C_COMMAND
+// 7 is C_COMMAND
