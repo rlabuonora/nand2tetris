@@ -16,4 +16,4 @@ exports.preprocessFile = function(file) {
     return arr.map(function(line) {
         return this.preprocessLine(line)
     }.bind(this));
-}
+};

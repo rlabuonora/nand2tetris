@@ -1,5 +1,5 @@
 var assert = require('assert');
-var assembler = require('../assembler.js');
+var parser = require('../parser.js');
 
 
 describe('Regular expression', function() {
@@ -18,6 +18,8 @@ describe('Regular expression', function() {
         });
     });
 });
+
+
 
 
 describe('Removing whitespace', function() {
@@ -53,35 +55,35 @@ describe('Removing whitespace and comments', function() {
 
     it('an empty line', function() {
         var str = "\r";
-        assert.equal(assembler.preprocessLine(str), "");
+        assert.equal(parser.preprocessLine(str), "");
     });
 
     it('a blank line', function() {
         var str = "      \r";
-        assert.equal(assembler.preprocessLine(str), "");
+        assert.equal(parser.preprocessLine(str), "");
     });
 
     it('an instruction ', function() {
         var str = "ADD 1 + 2\r";
-        assert.equal(assembler.preprocessLine(str), "ADD 1 + 2");
+        assert.equal(parser.preprocessLine(str), "ADD 1 + 2");
     });
 
 
     it('an instruction with a comment', function() {
         var str = "ADD 1 + 2  // This is a comment\r";
-        assert.equal(assembler.preprocessLine(str), "ADD 1 + 2");
+        assert.equal(parser.preprocessLine(str), "ADD 1 + 2");
     });
 
     it('a comment', function() {
         var str = "// This is a comment\r";
-        assert.equal(assembler.preprocessLine(str), "");
+        assert.equal(parser.preprocessLine(str), "");
     });
 });
 
 
 describe("Reading a file", function() {
     it('reads the file', function() {
-        var lines = assembler.readFile('../add/Add.asm');
+        var lines = parser.readFile('../add/Add.asm');
         var first = "// This file is part of www.nand2tetris.org\r"
         assert.equal(lines.length, 13);
         assert.equal(lines[0], first);
@@ -92,10 +94,10 @@ describe("Reading a file", function() {
 describe("A collection of lines", function() {
     it("preprocess", function() {
         var path = '../max/Max.asm';
-        var lines = assembler.preprocessFile(path);
+        var lines = parser.preprocessFile(path);
         assert.equal(lines[0], "");
         assert.equal(lines[7], "@R0");
         assert.equal(lines[8], "D=M");
-        
+
     });
 });
