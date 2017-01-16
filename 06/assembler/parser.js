@@ -21,9 +21,44 @@ var parser = {
     },
 
     commandType: function(str) {
-        if (s[0] === '@') return "A_COMMAND";
-        else if (s[0] === '(') return "L_COMMAND"
-        else return "C_COMMAND";
+        if (str[0] === '@') return "A_COMMAND";
+        else if (str[0] === '(') return "L_COMMAND"
+        else return "C_COMMAND";  //
+    },
+    symbol: function(str) {
+        if (this.commandType(str)!="A_COMMAND") throw "Error";
+        return str.substr(1, str.length-1);
+    },
+    dest: function(str) {
+        if (this.commandType(str) != "C_COMMAND") throw "Error";
+        var eq = str.indexOf("=");
+        if (eq < 0) return null;
+        else {
+            return str.substr(0, eq);
+        }
+    },
+    comp: function(str) {
+        if (this.commandType(str) != "C_COMMAND") throw "Error";
+        var eq = str.indexOf("=");
+        var semicol = str.indexOf(";");
+        var n = str.length;
+        if (eq > 0 && semicol > 0) {
+            return str.substr(eq+1, semicol-eq-1);
+        } else if (semicol < 0 && eq > 0) {
+            return str.substr(eq+1, n-eq-1);
+        } else if (semicol > 0 && eq < 0) {
+            return str.substr(0, semicol);
+        } else {
+            return str;
+        }
+    },
+    jump: function(str) {
+        if (this.commandType(str) != "C_COMMAND") throw "Error";
+        var semicol = str.indexOf(";");
+        if (semicol < 0) return null;
+        else {
+            return str.substr(semicol+1, str.length-1);
+        }
     }
 };
 
