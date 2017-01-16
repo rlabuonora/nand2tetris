@@ -15,7 +15,15 @@ var parser = {
         var arr = this.readFile(file);
         return arr.map(function(line) {
             return this.preprocessLine(line)
-        }.bind(this));
+        }.bind(this)).filter(function(line) {
+            return line !== "";
+        });
+    },
+
+    commandType: function(str) {
+        if (s[0] === '@') return "A_COMMAND";
+        else if (s[0] === '(') return "L_COMMAND"
+        else return "C_COMMAND";
     }
 };
 
