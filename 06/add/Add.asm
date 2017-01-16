@@ -6,7 +6,7 @@
 // Computes R0 = 2 + 3
 
 @2
-D=A
+D=A  // 111 + 0110000 -> code.comp(A) + code.comp(dest)
 @3
 D=D+A
 @0
