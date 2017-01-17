@@ -58,6 +58,33 @@ D;JEQ
 0;JMP
 
 (CLEAR)
-@CLEAR
-0;JMP
+@8192
+D=A
+@n
+M=D  // n = 8192
+
+@i
+M=0 // i = 0
+
+(LOOP_WHITE)
+@i
+D=M
+@n
+D=D-M // D=i-n
+@WAIT_KEYDOWN
+D;JGT // if i-n > 0 GOTO STOP
+
+@SCREEN
+D=A
+@i
+D=D+M // D=SCREEN+i
+A=D
+M=0 // RAM[SCREEN+i] = -1
+
+@i
+M=M+1 // i = i + 1
+@LOOP_WHITE
+0; JMP // GOTO LOOP
+
+
 
