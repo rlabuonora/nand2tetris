@@ -29,7 +29,7 @@ M=D  // n = 8192
 @i
 M=0 // i = 0
 
-(LOOP)
+(LOOP_BLACK)
 @i
 D=M
 @n
@@ -46,7 +46,7 @@ M=-1 // RAM[SCREEN+i] = -1
 
 @i
 M=M+1 // i = i + 1
-@LOOP
+@LOOP_BLACK
 0; JMP // GOTO LOOP
 
 (STOP)
