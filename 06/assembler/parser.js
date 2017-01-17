@@ -1,3 +1,6 @@
+// parses file and returns array
+// of instructions (without comments or whitespace)
+
 var parser = {
     preprocessLine:  function(str) {
         var re = /\/\/.*\r/;
