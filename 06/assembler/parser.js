@@ -29,11 +29,11 @@ var parser = {
         else return "C_COMMAND";  //
     },
     symbol: function(str) {
-        if (this.commandType(str)!="A_COMMAND") throw "Error";
+        if (this.commandType(str)!="A_COMMAND") throw str;
         return str.substr(1, str.length-1);
     },
     dest: function(str) {
-        if (this.commandType(str) != "C_COMMAND") throw "Error";
+        if (this.commandType(str) != "C_COMMAND") throw str;
         var eq = str.indexOf("=");
         if (eq < 0) return null;
         else {
