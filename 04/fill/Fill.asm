@@ -34,7 +34,7 @@ M=0 // i = 0
 D=M
 @n
 D=D-M // D=i-n
-@STOP
+@WAIT_KEYUP
 D;JGT // if i-n > 0 GOTO STOP
 
 @SCREEN
@@ -49,7 +49,15 @@ M=M+1 // i = i + 1
 @LOOP_BLACK
 0; JMP // GOTO LOOP
 
-(STOP)
-@STOP
-0; JMP
+(WAIT_KEYUP)
+@KBD
+D=M
+@CLEAR
+D;JEQ
+@WAIT_KEYUP
+0;JMP
+
+(CLEAR)
+@CLEAR
+0;JMP
 
