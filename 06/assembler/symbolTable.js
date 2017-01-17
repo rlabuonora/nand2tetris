@@ -41,6 +41,9 @@ var symbolTable = {
             if (type=="A_COMMAND") {
                 var symbol = parser.symbol(instructions[i]);
                 if (!symbol[0].match(/\d+/) && !this.contains(symbol)) {
+                    // only if the first letter of the symbol is not a number
+                    // pong uses variable names: math.0, etc.
+                    // and the symbol is not on the table
                     this.addEntry(symbol, ram.toString());
                     ram++;
                 }
