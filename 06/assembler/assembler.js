@@ -42,6 +42,7 @@ var assembler = {
             return this.translateInstruction(instruction, symbolTable);
         }.bind(this));
         this.saveToFile(binary);
+        return binary;
     },
     saveToFile(binaryInstructions) {
         var str = binaryInstructions.join("\r");
