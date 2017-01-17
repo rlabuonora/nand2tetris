@@ -10,12 +10,12 @@
 
 
 // Put your code here.
-(WAIT)
+(WAIT_KEYDOWN)
 @KBD
 D=M
 @FILL_BLACK
 D;JGT  // if RAM[KBD] > 0 GOTO FILL BLACK
-@WAIT
+@WAIT_KEYDOWN
 0;JMP  // GOTO WAIT
 
 
