@@ -8,7 +8,19 @@
 // i.e. writes "black" in every pixel. When no key is pressed, the
 // program clears the screen, i.e. writes "white" in every pixel.
 
+
 // Put your code here.
+(WAIT)
+@KBD
+D=M
+@FILL_BLACK
+D;JGT  // if RAM[KBD] > 0 GOTO FILL BLACK
+@WAIT
+0;JMP  // GOTO WAIT
+
+
+
+(FILL_BLACK)
 @8192
 D=A
 @n
