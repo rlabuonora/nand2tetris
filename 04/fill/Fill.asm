@@ -9,3 +9,35 @@
 // program clears the screen, i.e. writes "white" in every pixel.
 
 // Put your code here.
+@8192
+D=A
+@n
+M=D  // n = 8192
+
+@i
+M=0 // i = 0
+
+(LOOP)
+@i
+D=M
+@n
+D=D-M // D=i-n
+@STOP
+D;JGT // if i-n > 0 GOTO STOP
+
+@SCREEN
+D=A
+@i
+D=D+M // D=SCREEN+i
+A=D
+M=-1 // RAM[SCREEN+i] = -1
+
+@i
+M=M+1 // i = i + 1
+@LOOP
+0; JMP // GOTO LOOP
+
+(STOP)
+@STOP
+0; JMP
+
