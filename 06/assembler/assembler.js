@@ -1,6 +1,6 @@
 var code = require('./code');
 var parser = require('./parser');
-var symbolTable = require('./symbolTable');
+var SymbolTable = require('./SymbolTable');
 fs = require('fs');
 
 
@@ -32,15 +32,19 @@ var assembler = {
     },
     translateFile: function(file) { // returns an array of binary instructions
         var instructions = parser.preprocessFile(file);
-        symbolTable.build(instructions);
+
+        // build symbol table
+        var symbolTable = new SymbolTable(instructions);
         // remove labels
         var instructions = instructions.filter(function(line) {
             return line[0] !== "(";
         });
-        
+        // get binary instructions
         var binary = instructions.map(function(instruction) {
             return this.translateInstruction(instruction, symbolTable);
         }.bind(this));
+
+        // save them to file
         this.saveToFile(binary);
         return binary;
     },
@@ -48,7 +52,6 @@ var assembler = {
         var str = binaryInstructions.join("\r");
         fs.writeFile('output.hack', str , function (err) {
             if (err) return console.log(err);
-            console.log('output file written  > output.hack');
         });        
 
     }
