@@ -1,0 +1,10 @@
+  /home/datos/defensa/home/rlabuonora/Escritorio/graficos/cursos/Nand2Tetris/nand2tetris/projects/07/VMTranslator:
+  total used in directory 32 available 304043916
+  drwxr-xr-x 5 rlabuonora precios03 4096 ene 23 15:12 .
+  drwx------ 5 rlabuonora precios03 4096 ene 20 12:21 ..
+  drwxr-xr-x 4 rlabuonora precios03 4096 ene 23 11:18 node_modules
+  -rw-r--r-- 1 rlabuonora precios03  255 ene 23 11:18 package.json
+  -rw-r--r-- 1 rlabuonora precios03  866 ene 23 15:20 Parser.js
+  drwxr-xr-x 3 rlabuonora precios03 4096 ene 23 14:08 test
+  drwxr-xr-x 4 rlabuonora precios03 4096 ene 23 14:49 vmtests
+  -rw-r--r-- 1 rlabuonora precios03 1822 ene 23 14:12 VMTranslator.js
