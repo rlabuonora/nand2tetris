@@ -1,4 +1,5 @@
-assert = require('assert');
+var assert = require('assert');
+var fs = require('fs');
 var VMTranslator = require('../VMTranslator');
 
 describe('VMTranslator', function() {
@@ -10,6 +11,11 @@ describe('VMTranslator', function() {
             assert.deepEqual(t1.files, ['./test/support/singleFile/singleFile.vm']);
             assert.equal(t1.destinationPath, './test/support/singleFile');
             assert.equal(t1.objectFileName, 'singleFile.asm');
+            var destFile = './test/support/singleFile/singleFile.asm';
+            // assert that file exists
+            assert(fs.existsSync(destFile));
+            // clean up file
+            fs.unlinkSync(destFile);
             
         });
         it('should throw an error if the file/dir does not exist', function() {
@@ -47,7 +53,9 @@ describe('VMTranslator', function() {
             ]);
             assert.equal(t1.destinationPath, file);
             assert.equal(t1.objectFileName, 'multipleFiles.asm');
-            // assert(fs.existsSync('./test/support/multipleFiles/multipleFiles.asm'));
+            var file = './test/support/multipleFiles/multipleFiles.asm';
+            assert(fs.existsSync(file));
+            fs.unlinkSync(file);
         });
         // how do I test that I have read all the files in the folder
         // TODO use translation to make sure we translate all of the files

@@ -13,7 +13,8 @@ function VMTranslator( sourcePath ) {
         return path.basename(sourcePath, '.vm') + ".asm";
     };
     this.saveFile = function( assemblerCode ) {
-        fs.writeFile(this.destinationPath + "/" + this.objectFileName, assemblerCode , function (err) {
+        var dest = this.destinationPath + "/" + this.objectFileName;
+        fs.writeFile(dest, assemblerCode , function (err) {
             if (err) return console.log(err);
         });        
     };
@@ -28,7 +29,9 @@ function VMTranslator( sourcePath ) {
     var stats = fs.statSync( sourcePath );
     // if is directory
     if (stats.isDirectory()) {
-        this.files = fs.readdirSync( sourcePath ).map(function(file) { return sourcePath + "/" + file; });
+        this.files = fs.readdirSync( sourcePath )
+            .filter(function(file) { return path.extname(file) === ".vm"; })
+            .map(function(file) { return sourcePath + "/" + file; });
         this.destinationPath = sourcePath;
         this.objectFileName = this.getObjectFileNameFromPath( sourcePath );
     } // if is a single file
@@ -37,8 +40,9 @@ function VMTranslator( sourcePath ) {
         this.destinationPath = path.dirname( sourcePath );
         this.objectFileName = this.getObjectFileNameFromFile( sourcePath );
     }
-
-    //this.saveFile("assembler commands");
+    this.saveFile("assembler commands");
 }
 
+// var args =process.argv.slice(2);
+// var t = new VMTranslator(args[0]);
 module.exports = VMTranslator;
