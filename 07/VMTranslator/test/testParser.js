@@ -11,11 +11,42 @@ describe('parser', function() {
             assert.equal(parser.commands[0], "push constant 10");
         });
     });
-    describe('Command Type', function() {
-        
-        
+    describe('args', function() {
         var parser = new Parser();
-        
+        describe('Push', function() {
+            it("arg1 of a C_PUSH", function() {
+                var expected = "constant";
+                var actual = parser.arg1("push constant 10");
+                assert.equal(expected, actual);
+            });
+            it("arg2 of a C_PUSH", function() {
+                var expected = "10";
+                var actual = parser.arg2("push constant 10");
+                assert.equal(expected, actual);
+            });
+        });
+        describe('Pop', function() {
+            it("arg1 of a C_POP", function() {
+                var expected = "local";
+                var actual = parser.arg1("pop local 0");
+                assert.equal(expected, actual);
+            });
+            it("arg2 of a C_POP", function() {
+                var expected = "0";
+                var actual = parser.arg2("pop local 0");
+                assert.equal(expected, actual);
+            });
+        });
+        describe('arithmetic', function() {
+            it("arg1 of a add", function() {
+                var expected = "add";
+                var actual = parser.arg1("add");
+                assert.equal(expected, actual);
+            });
+        });
+    });
+    describe('Command Type', function() {
+        var parser = new Parser();
         it("C_ARITHMETIC", function() {
 
             var expected = "C_ARITHMETIC";
@@ -25,7 +56,7 @@ describe('parser', function() {
                 actual = parser.commandType(cmd);
                 assert.equal(actual, expected);
             });
-            
+
         });
         it("C_PUSH", function() {
             var actual = parser.commandType("push constant 10");
