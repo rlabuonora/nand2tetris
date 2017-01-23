@@ -43,6 +43,11 @@ function VMTranslator( sourcePath ) {
     this.saveFile("assembler commands");
 }
 
-// var args =process.argv.slice(2);
-// var t = new VMTranslator(args[0]);
-module.exports = VMTranslator;
+
+if (require.main === module) {
+    var args =process.argv.slice(2);
+    var t = new VMTranslator(args[0]);    
+} else {
+    module.exports = VMTranslator;
+}
+
