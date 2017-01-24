@@ -23,5 +23,167 @@ repeat 7 {
 
 output;
 
+repeat 14 {
+  ticktock;
+}
+
+output;
+
+repeat 7 {
+  ticktock;
+}  // push constant 21 
+
+output;
+
+
+repeat 7 {
+  ticktock;
+} // push constant 22
+
+output;
+
+repeat 14 {
+  ticktock;
+} // pop argument 2
+
+output;
+
+repeat 14 {
+  ticktock;
+} // pop argument 2
+
+output; // pop argument 1
+
+repeat 7 {
+  ticktock;
+} 
+
+output; // push constant 36
+
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // pop this 6
+
+repeat 7 {
+  ticktock;
+} 
+
+output; // push constant 42
+
+repeat 7 {
+  ticktock;
+} 
+
+output; // push constant 45
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // pop that 5
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // pop that 2
+
+repeat 7 {
+  ticktock;
+} 
+
+output; // push constant 510
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // pop temp 6
+
+repeat 10 {
+  ticktock;
+} 
+
+output; // push local 0
+
+repeat 10 {
+  ticktock;
+} 
+
+
+output; // push that 5
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // add
+
+repeat 10 {
+  ticktock;
+} 
+
+output; // push argument 1
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // sub
+
+repeat 10 {
+  ticktock;
+} 
+
+output; // push this 6
+
+repeat 10 {
+  ticktock;
+} 
+
+output; // push this 6
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // add
+
+repeat 14 {
+  ticktock;
+} 
+
+output; // sub
+
+repeat 7 {
+  ticktock;
+} 
+
+output; // push temp6
+repeat 14 {
+  ticktock;
+} 
+
+output; // add
+
+repeat 9 {
+  ticktock;
+} 
+
+output; // neg
+repeat 8 {
+  ticktock;
+} 
+
+output; // push constant -472
+
+repeat 9 {
+  ticktock;
+} 
+
+output; // neg
 
 

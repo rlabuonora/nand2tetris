@@ -29,3 +29,9 @@ add
 sub
 push temp 6
 add
+neg
+neg
+push constant 472
+eq
+
+

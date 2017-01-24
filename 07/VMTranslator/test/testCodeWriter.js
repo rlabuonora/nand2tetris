@@ -12,32 +12,69 @@ describe("Writing code", function() {
         it('constant', function() {
             var actual = codeWriter.writeAssembly("push constant 10");
             var expected = [
-
+                "@10",
+                "D=A",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
             ];
+            assert.deepEqual(actual, expected);
         });
         it('push local', function() {
             var actual = codeWriter.writeAssembly("push local 0");
             var expected = [
-
+                "@0",
+                "D=A",
+                "@LCL",
+                "A=D+M",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
             ];
+            assert.deepEqual(actual, expected);
         });
         it('that', function() {
             var actual = codeWriter.writeAssembly("push that 5");
             var expected = [
-
+                "@5",
+                "D=A",
+                "@THAT",
+                "A=D+M",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
             ];
+            assert.deepEqual(actual, expected);
         });
         it('temp', function() {
             var actual = codeWriter.writeAssembly("push temp 6");
             var expected = [
-
+                "@11",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
             ];
+            assert.deepEqual(actual, expected);
         });
         it('this', function() {
             var actual = codeWriter.writeAssembly("push this 6");
             var expected = [
-
+                "@6", "D=A", "@THIS",
+                "A=D+M", "D=M", "@SP",
+                "A=M", "M=D","@SP","M=M+1"
             ];
+            assert.deepEqual(actual, expected);
         });
     });
 });

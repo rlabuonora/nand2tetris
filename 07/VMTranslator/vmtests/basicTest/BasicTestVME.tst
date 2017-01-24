@@ -17,6 +17,84 @@ set that 3010;
 
 
 vmstep;
+output; // push constant 0
+vmstep; 
+output; // pop local 0
+vmstep;
+output; // push constant 21
+vmstep;
+output; // push constant 22
+vmstep;
+output; // pop argument 2
+
+vmstep;
+output; // pop argument 1
+
+vmstep;
+output; // push constant 36
+
+vmstep;
+output; // pop this 6
+vmstep;
+output; // push constant 42
+vmstep;
+output; // push constant 46
+
+vmstep;
+output; // pop that 5
+
+vmstep;
+output; // pop that 2
+
+vmstep;
+output; // push constant 510
+
+vmstep;
+output; // pop temp 6
+
+vmstep;
+output; // push local 0
+
+vmstep;
+output; // push that 5
+
+vmstep;
+output; // add
+
+vmstep;
+output; // push argument 1
+
+vmstep;
+output; // sub
+
+vmstep;
+output; // push this 6
+
+vmstep;
+output; // push this 6
+
+vmstep;
+output; // add
+
+vmstep;
+output; // sub
+
+vmstep;
+output; // push temp 6
+
+vmstep;
+output; // add
+
+vmstep;
+output; // neg
+
+vmstep;
+output; // push constant -472
 
 
-output;
+
+
+
+
+
+
