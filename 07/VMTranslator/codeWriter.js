@@ -1,5 +1,7 @@
 var codeWriter = {
     fileName: "",
+    segmentCodes: { "local": "LCL", "argument": "ARG",
+                    "this": "THIS", "that": "THAT" },
     commandType( str ) {
         var arithmeticCommands = ["add", "sub", "neg", "eq",
                                   "gt", "lt", "and", "or", "not"];
@@ -32,8 +34,39 @@ var codeWriter = {
         }
     },
 
+    addOrSub( arg ) {
+        var base = [
+            "@SP","M=M-1", "@SP",
+            "A=M","D=M","@SP",
+            "M=M-1","A=M", "D=D+M",
+            "@SP","A=M", "M=D",
+            "@SP","M=M+1"];
+        if(arg === "sub") base[4] = "D=-M";
+        return base;
+
+    },
+
     writeArithmetic( vmCommand ) {
-        return ["arithmetic", "command"];
+        var arg1 = this.arg1( vmCommand);
+        if (arg1 === "add" || arg1 == "sub") {
+            return this.addOrSub( arg1 );
+        }
+    },
+
+    popSegment(segment, offset) {
+        if (segment === "temp") {
+            var newOffset = 5 + parseInt(offset);
+            var firstPart = ["@" + newOffset, "D=A"];
+        } else {
+            var segmentCode = this.segmentCodes[segment];
+            var firstPart = ["@" + offset, "D=A", "@" + segmentCode, "D=D+M"];
+        }
+        var secondPart =  [ "@addr", "M=D",
+                            "@SP", "M=M-1", "@SP",
+                            "A=M", "D=M", "@addr",
+                            "A=M", "M=D"];
+
+        return firstPart.concat(secondPart);
     },
 
     pushConstant( constant) {
@@ -41,19 +74,18 @@ var codeWriter = {
     },
 
     pushSegment( segment, offset) {
-        var segmentCodes = { "local": "LCL", "argument": "ARG",
-                             "this": "THIS", "that": "THAT" };
+
         var firstPart;
         if (segment === "temp") {
             firstPart = ["@" + (5+parseInt(offset))];
 
         } else {
-            var segment = segmentCodes[segment];
+            var segment = this.segmentCodes[segment];
             firstPart =  ["@" + offset, "D=A", "@" + segment, "A=D+M"]
         }
-        var secondPart = ["D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]; 
+        var secondPart = ["D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"];
         return  firstPart.concat(secondPart);
-          
+
 
     },
     writeAssembly( vmCommand ) {
@@ -76,6 +108,11 @@ var codeWriter = {
                 var offset = this.arg2( vmCommand );
                 return this.pushSegment(segment, offset);
             }
+        }
+        else if (type === "C_POP") {
+            var segment = this.arg1( vmCommand);
+            var offset = this.arg2( vmCommand );
+            return this.popSegment( segment, offset );
         }
     }
 }

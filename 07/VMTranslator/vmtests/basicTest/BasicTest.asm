@@ -12,15 +12,14 @@ M=M+1
 D=A
 @LCL
 D=D+M
+
 @addr
 M=D // addr = LCL+0
-
 @SP
 M=M-1
 @SP
 A=M
 D=M // pop into D
-
 @addr
 A=M
 M=D
@@ -177,13 +176,11 @@ M=D
 M=M+1
 
 // pop temp 6
-@6
+@11
 D=A
-@5
-D=D+A // do directly in JS
+
 @addr
 M=D
-
 @SP
 M=M-1
 @SP
