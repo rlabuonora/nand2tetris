@@ -1,14 +1,16 @@
 var assert = require('assert');
 var Parser = require('../Parser');
-var codeWriter = require('../codeWriter');
+var CodeWriter = require('../CodeWriter');
 
 describe("Writing code", function() {
     it('setting filename', function() {
+        var codeWriter = new CodeWriter();
         codeWriter.fileName = "blabla.vm";
         assert.equal(codeWriter.fileName, "blabla.vm");
     })
 
     describe('pushing', function() {
+        var codeWriter = new CodeWriter();
         it('constant', function() {
             var actual = codeWriter.writeAssembly("push constant 10");
             var expected = [
@@ -78,6 +80,7 @@ describe("Writing code", function() {
         });
     });
     describe('popping', function() {
+        var codeWriter = new CodeWriter();
         it('local', function() {
             var actual = codeWriter.writeAssembly("pop local 0");
             var expected = [
@@ -124,6 +127,7 @@ describe("Writing code", function() {
     });
 
     describe('arithmetic commands', function() {
+        var codeWriter = new CodeWriter();
         it("add", function() {
             var actual = codeWriter.writeAssembly("add");
             var expected = [
@@ -233,6 +237,7 @@ describe("Writing code", function() {
 describe('args', function() {
 
     describe('Push', function() {
+        var codeWriter = new CodeWriter();
         it("arg1 of a C_PUSH", function() {
             var expected = "constant";
             var actual = codeWriter.arg1("push constant 10");
@@ -245,6 +250,7 @@ describe('args', function() {
         });
     });
     describe('Pop', function() {
+        var codeWriter = new CodeWriter();
         it("arg1 of a C_POP", function() {
             var expected = "local";
             var actual = codeWriter.arg1("pop local 0");
@@ -257,6 +263,7 @@ describe('args', function() {
         });
     });
     describe('arithmetic', function() {
+        var codeWriter = new CodeWriter();
         it("arg1 of a add", function() {
             var expected = "add";
             var actual = codeWriter.arg1("add");
@@ -266,8 +273,8 @@ describe('args', function() {
 });
 
 describe('Command Type', function() {
+    var codeWriter = new CodeWriter();
     it("C_ARITHMETIC", function() {
-
         var expected = "C_ARITHMETIC";
         var arithmeticCommands = ["add", "sub", "neg", "eq",
                                   "gt", "lt", "and", "or", "not"];

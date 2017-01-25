@@ -1,8 +1,8 @@
-var codeWriter = {
-    fileName: "",
-    segmentCodes: { "local": "LCL", "argument": "ARG",
-                    "this": "THIS", "that": "THAT" },
-    commandType( str ) {
+function CodeWriter() {
+    this.fileName = "";
+    this.segmentCodes = { "local": "LCL", "argument": "ARG",
+                          "this": "THIS", "that": "THAT" };
+    this.commandType = function( str ) {
         var arithmeticCommands = ["add", "sub", "neg", "eq",
                                   "gt", "lt", "and", "or", "not"];
 
@@ -13,9 +13,9 @@ var codeWriter = {
             if (first === "push") return "C_PUSH";
             else if (first === "pop") return "C_POP";
         }
-    },
+    };
 
-    arg1( str ) {
+    this.arg1 = function( str ) {
         // throw error y C_RETURN
         var type = this.commandType(str);
         if ( type === "C_RETURN") throw Error;
@@ -23,18 +23,18 @@ var codeWriter = {
         else {
             return str.split(" ")[1];
         }
-    },
+    };
 
-    arg2( str ) {
+    this.arg2 = function( str ) {
         var type = this.commandType(str);
         if (!(type === "C_PUSH" || type === "C_POP" ||
               type === "C_FUNCTION" || type === "C_POP")) throw Error;
         else {
             return str.split(" ")[2];
         }
-    },
+    };
 
-    addOrSub( arg ) {
+    this.addOrSub = function( arg ) {
         var base = [
             "@SP","M=M-1", "@SP",
             "A=M","D=M","@SP",
@@ -44,16 +44,16 @@ var codeWriter = {
         if(arg === "sub") base[4] = "D=-M";
         return base;
 
-    },
+    };
 
-    writeArithmetic( vmCommand ) {
+    this.writeArithmetic = function( vmCommand ) {
         var arg1 = this.arg1( vmCommand);
         if (arg1 === "add" || arg1 == "sub") {
             return this.addOrSub( arg1 );
         }
-    },
+    };
 
-    popSegment(segment, offset) {
+    this.popSegment = function(segment, offset) {
         if (segment === "temp") {
             var newOffset = 5 + parseInt(offset);
             var firstPart = ["@" + newOffset, "D=A"];
@@ -67,13 +67,13 @@ var codeWriter = {
                             "A=M", "M=D"];
 
         return firstPart.concat(secondPart);
-    },
+    };
 
-    pushConstant( constant) {
+    this.pushConstant = function( constant) {
         return ["@" + constant, "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1"];
-    },
+    };
 
-    pushSegment( segment, offset) {
+    this.pushSegment = function( segment, offset) {
 
         var firstPart;
         if (segment === "temp") {
@@ -85,18 +85,16 @@ var codeWriter = {
         }
         var secondPart = ["D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"];
         return  firstPart.concat(secondPart);
-
-
-    },
-    writeAssembly( vmCommand ) {
+    };
+    this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
         var type = this.commandType( vmCommand );
         if (type === "C_PUSH" || type === "C_POP") return this.writePushPop( vmCommand );
         else if (type === "C_ARITHMETIC") return this.writeArithmetic( vmCommand );
-    },
+    };
 
-    writePushPop( vmCommand ) {
+    this.writePushPop = function( vmCommand ) {
         var type = this.commandType( vmCommand );
         if (type === "C_PUSH") {
             var segment = this.arg1( vmCommand);
@@ -114,8 +112,8 @@ var codeWriter = {
             var offset = this.arg2( vmCommand );
             return this.popSegment( segment, offset );
         }
-    }
+    };
 }
 
 
-module.exports = codeWriter;
+module.exports = CodeWriter;
