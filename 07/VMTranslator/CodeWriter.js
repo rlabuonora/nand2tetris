@@ -67,6 +67,14 @@ function CodeWriter() {
         "M=M+1"]
     }
 
+    this.neg = function() {
+        return [
+            "@SP", "M=M-1", "A=M",
+            "D=-M", "@SP", "A=M",
+            "M=D", "@SP", "M=M+1"
+        ];
+    }
+
     this.writeArithmetic = function( vmCommand ) {
         var arg1 = this.arg1( vmCommand);
         if (arg1 === "add" || arg1 === "sub") {
@@ -77,6 +85,9 @@ function CodeWriter() {
         }
         else if (arg1 === "not") {
             return this.not();
+        }
+        else if (arg1 === "neg") {
+            return this.neg();
         }
     };
 

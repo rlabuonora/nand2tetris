@@ -152,7 +152,7 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
 
-        xit("neg", function() {
+        it("neg", function() {
             var actual = codeWriter.writeAssembly("neg");
             var expected = [
                 "@SP", "M=M-1", "A=M",
