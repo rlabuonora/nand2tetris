@@ -2,6 +2,7 @@ function CodeWriter() {
     this.fileName = "";
     this.segmentCodes = { "local": "LCL", "argument": "ARG",
                           "this": "THIS", "that": "THAT" };
+    
     this.commandType = function( str ) {
         var arithmeticCommands = ["add", "sub", "neg", "eq",
                                   "gt", "lt", "and", "or", "not"];
@@ -46,10 +47,36 @@ function CodeWriter() {
 
     };
 
+    this.andOrOr = function( arg ) {
+        var base = [
+            "@SP", "M=M-1", "@SP",
+            "A=M", "D=M", "@SP",
+            "M=M-1", "@SP", "A=M",
+            "D=D|M", "D=-D", "@SP",
+            "A=M", "M=D", "@SP",
+            "M=M+1" 
+        ];
+        if (arg === "and") { base[9] = "D=D&M"; }
+        return base;
+    };
+
+    this.not = function() {
+        return ["@SP", "M=M-1", "@SP",
+        "A=M","D=!M", "@SP",
+        "A=M","M=D", "@SP",
+        "M=M+1"]
+    }
+
     this.writeArithmetic = function( vmCommand ) {
         var arg1 = this.arg1( vmCommand);
-        if (arg1 === "add" || arg1 == "sub") {
+        if (arg1 === "add" || arg1 === "sub") {
             return this.addOrSub( arg1 );
+        }
+        else if (arg1 === "and" || arg1 === "or" ) {
+            return this.andOrOr( arg1 );
+        }
+        else if (arg1 === "not") {
+            return this.not();
         }
     };
 

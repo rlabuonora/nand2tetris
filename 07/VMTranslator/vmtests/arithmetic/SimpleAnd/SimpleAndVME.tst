@@ -4,13 +4,18 @@
 // File name: projects/07/StackArithmetic/SimpleAdd/SimpleAndVME.tst
 
 load SimpleAnd.vm,
-output-file SimpleAnd.out,
-compare-to SimpleAnd.cmp,
+output-file SimpleAnd.cmp,
 output-list RAM[0]%D2.6.2 RAM[256]%D2.6.2;
 
 set RAM[0] 256,
 
 repeat 3 {
+  vmstep;
+}
+
+output;
+
+repeat 2 {
   vmstep;
 }
 

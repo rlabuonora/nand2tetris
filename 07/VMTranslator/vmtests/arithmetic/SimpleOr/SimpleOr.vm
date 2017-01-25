@@ -1,0 +1,8 @@
+// Pushes and adds two constants.
+push constant 0
+push constant 0
+or
+
+push constant 1
+or
+

@@ -128,8 +128,10 @@ describe("Writing code", function() {
 
     describe('arithmetic commands', function() {
         var codeWriter = new CodeWriter();
+        var command = "add";
+        assert.equal(codeWriter.commandType(command),  "C_ARITHMETIC");
         it("add", function() {
-            var actual = codeWriter.writeAssembly("add");
+            var actual = codeWriter.writeAssembly(command);
             var expected = [
                 "@SP","M=M-1", "@SP",
                 "A=M","D=M","@SP",
@@ -151,8 +153,7 @@ describe("Writing code", function() {
         });
 
         xit("neg", function() {
-            var actual = codeWriter.writeAssembly("and");
-            // if we have to ands it breaks down !!
+            var actual = codeWriter.writeAssembly("neg");
             var expected = [
                 "@SP", "M=M-1", "A=M",
                 "D=-M", "@SP", "A=M",
@@ -161,7 +162,7 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
         xit("eq", function() {
-            var actual = codeWriter.writeAssembly("and");
+            var actual = codeWriter.writeAssembly("eq");
             // if we have to ands it breaks down !!
             var expected = [
                 "@SP", "M=M-1", "@SP",
@@ -199,30 +200,33 @@ describe("Writing code", function() {
             ];
             assert.deepEqual(actual, expected);
         });
-        xit("and", function() {
+        it("and", function() {
             var actual = codeWriter.writeAssembly("and");
             var expected = [
-                "@SP","M=M-1", "@SP",
-                "A=M", "D=M", "@SP ",
-                "M=M-1", "@SP", "A=M",
-                "D=D&M", "@FALSE", "D;JEQ ",
-                "@SP", "A=M", "M=-1",
-                "@SP", "M=M+1", "@END_IF",
-                "0;JMP", "(FALSE)", "@SP",
-                "A=M", "M=0", "@SP",
-                "M=M+1", "(END_IF)"
-            ];
-            assert.deepEqual(actual, expected);
-        });
-        xit("or", function() {
-            var actual = codeWriter.writeAssembly("or");
-            var expected = [
+                "@SP", "M=M-1", "@SP",
+                "A=M", "D=M", "@SP",
+                "M=M-1",  "@SP", "A=M",
+                "D=D&M", "D=-D", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1"
 
             ];
             assert.deepEqual(actual, expected);
         });
-        xit("not", function() {
-            var actual = codeWriter.writeAssembly("not");
+        it("or", function() {
+            var actual = codeWriter.writeAssembly("or");
+            var expected = [
+                "@SP", "M=M-1", "@SP",
+                "A=M", "D=M", "@SP",
+                "M=M-1", "@SP", "A=M",
+                "D=D|M", "D=-D", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it("not", function() {
+            var command = "not";
+            var actual = codeWriter.writeArithmetic(command);
             var expected = [
                 "@SP", "M=M-1", "@SP",
                 "A=M","D=!M", "@SP",
