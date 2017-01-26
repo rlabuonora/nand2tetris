@@ -47,28 +47,24 @@ function VMTranslator( sourcePath ) {
 
     this.translateInstructions = function( arr, codeWriter ) {
         // translates an array of instructions
-        arr.reduce(function(a, b) {
+        return arr.reduce(function(a, b) {
             return a.concat(codeWriter.writeAssembly(b));
-        });
+        }, []);
+    };
+    this.translate = function() {
+        var codeWriter = new CodeWriter();
+        return this.files.reduce(function(a, b) {
+            var parser = new Parser( b );
+            var commands = parser.commands;
+            return a.concat(this.translateInstructions(commands, codeWriter));
+        }.bind(this), []);
     }
+
     var sourcePath = this.removeTrailingSlash( sourcePath );
     this.initializeFromPath( sourcePath )
-
-    // create new Code writer
-    var codeWriter = new CodeWriter();
-    var assemblerCommands = this.files.map(function(file) {
-        var parser = new Parser( file );
-        return parser.commands.map( function( command ) {
-            return codeWriter.writeAssembly( command );
-        } )
-    })
-
-    // TODO: clean up using reduce + map
-    const flatten = arr => arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-    var a = flatten(assemblerCommands).join("\n");
-
     // save to file
-    this.saveFile(a);
+    var translation = this.translate();
+    this.saveFile("algo");
 }
 
 

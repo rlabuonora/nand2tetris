@@ -14,6 +14,7 @@ describe("Writing code", function() {
         it('constant', function() {
             var actual = codeWriter.writeAssembly("push constant 10");
             var expected = [
+                "// push constant 10",
                 "@10",
                 "D=A",
                 "@SP",
@@ -27,6 +28,7 @@ describe("Writing code", function() {
         it('push local', function() {
             var actual = codeWriter.writeAssembly("push local 0");
             var expected = [
+                "// push local 0",
                 "@0",
                 "D=A",
                 "@LCL",
@@ -43,6 +45,7 @@ describe("Writing code", function() {
         it('that', function() {
             var actual = codeWriter.writeAssembly("push that 5");
             var expected = [
+                "// push that 5",
                 "@5",
                 "D=A",
                 "@THAT",
@@ -59,6 +62,7 @@ describe("Writing code", function() {
         it('temp', function() {
             var actual = codeWriter.writeAssembly("push temp 6");
             var expected = [
+                "// push temp 6",
                 "@11",
                 "D=M",
                 "@SP",
@@ -72,7 +76,7 @@ describe("Writing code", function() {
         it('this', function() {
             var actual = codeWriter.writeAssembly("push this 6");
             var expected = [
-                "@6", "D=A", "@THIS",
+                "// push this 6", "@6", "D=A", "@THIS",
                 "A=D+M", "D=M", "@SP",
                 "A=M", "M=D","@SP","M=M+1"
             ];
@@ -84,6 +88,7 @@ describe("Writing code", function() {
         it('local', function() {
             var actual = codeWriter.writeAssembly("pop local 0");
             var expected = [
+                "// pop local 0",
                 "@0", "D=A", "@LCL",
                 "D=D+M", "@addr", "M=D",
                 "@SP", "M=M-1", "@SP",
@@ -95,6 +100,7 @@ describe("Writing code", function() {
         it('that', function() {
             var actual = codeWriter.writeAssembly("pop that 5");
             var expected = [
+                "// pop that 5",
                 "@5", "D=A", "@THAT",
                 "D=D+M", "@addr",
                 "M=D", "@SP", "M=M-1",
@@ -106,6 +112,7 @@ describe("Writing code", function() {
         it('argument', function() {
             var actual = codeWriter.writeAssembly("pop argument 2");
             var expected = [
+                "// pop argument 2",
                 "@2", "D=A", "@ARG",
                 "D=D+M", "@addr", "M=D",
                 "@SP", "M=M-1", "@SP",
@@ -117,6 +124,7 @@ describe("Writing code", function() {
         it('temp', function() {
             var actual = codeWriter.writeAssembly("pop temp 6");
             var expected = [
+                "// pop temp 6",
                 "@11", "D=A", "@addr", "M=D",
                 "@SP",  "M=M-1", "@SP",
                 "A=M",  "D=M", "@addr",
@@ -133,6 +141,7 @@ describe("Writing code", function() {
         it("add", function() {
             var actual = codeWriter.writeAssembly(command);
             var expected = [
+                "// add",
                 "@SP","M=M-1", "@SP",
                 "A=M","D=M","@SP",
                 "M=M-1","A=M", "D=D+M",
@@ -143,6 +152,7 @@ describe("Writing code", function() {
         it("sub", function() {
             var actual = codeWriter.writeAssembly("sub");
             var expected = [
+                "// sub",
                 "@SP", "M=M-1", "@SP",
                 "A=M", "D=-M", "@SP",
                 "M=M-1", "A=M", "D=D+M",
@@ -155,7 +165,7 @@ describe("Writing code", function() {
         it("neg", function() {
             var actual = codeWriter.writeAssembly("neg");
             var expected = [
-                "@SP", "M=M-1", "A=M",
+                "// neg", "@SP", "M=M-1", "A=M",
                 "D=-M", "@SP", "A=M",
                 "M=D", "@SP", "M=M+1"
             ];
@@ -165,7 +175,7 @@ describe("Writing code", function() {
             var codeWriter = new CodeWriter();
             var actual = codeWriter.writeAssembly("eq");
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// eq", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=D-M", "@NEQ_0", "D;JNE",
@@ -179,7 +189,7 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
             actual = codeWriter.writeAssembly("eq");
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// eq", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=D-M", "@NEQ_1", "D;JNE",
@@ -196,7 +206,7 @@ describe("Writing code", function() {
             var actual = codeWriter.writeAssembly("gt");
             // if we have to ands it breaks down !!
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// gt", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=M-D ", "@TRUE_0", "D;JGT ",
@@ -211,7 +221,7 @@ describe("Writing code", function() {
         it("lt", function() {
             var actual = codeWriter.writeAssembly("lt");
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// lt", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=M-D ", "@TRUE_0",
@@ -227,7 +237,7 @@ describe("Writing code", function() {
         it("and", function() {
             var actual = codeWriter.writeAssembly("and");
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// and", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1",  "@SP", "A=M",
                 "D=D&M", "D=-D", "@SP", "A=M",
@@ -239,7 +249,7 @@ describe("Writing code", function() {
         it("or", function() {
             var actual = codeWriter.writeAssembly("or");
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// or", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=D|M", "D=-D", "@SP",
@@ -250,9 +260,9 @@ describe("Writing code", function() {
         });
         it("not", function() {
             var command = "not";
-            var actual = codeWriter.writeArithmetic(command);
+            var actual = codeWriter.writeAssembly(command);
             var expected = [
-                "@SP", "M=M-1", "@SP",
+                "// not", "@SP", "M=M-1", "@SP",
                 "A=M","D=!M", "@SP",
                 "A=M","M=D", "@SP",
                 "M=M+1"

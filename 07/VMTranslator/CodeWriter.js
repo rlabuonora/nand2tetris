@@ -181,9 +181,12 @@ function CodeWriter() {
     this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
+        var result = [];
         var type = this.commandType( vmCommand );
-        if (type === "C_PUSH" || type === "C_POP") return this.writePushPop( vmCommand );
-        else if (type === "C_ARITHMETIC") return this.writeArithmetic( vmCommand );
+        if (type === "C_PUSH" || type === "C_POP") result =  this.writePushPop( vmCommand );
+        else if (type === "C_ARITHMETIC") result =  this.writeArithmetic( vmCommand );
+        result.unshift("// " + vmCommand);
+        return result;
     };
 
     this.writePushPop = function( vmCommand ) {

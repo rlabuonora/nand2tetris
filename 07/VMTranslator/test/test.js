@@ -2,6 +2,7 @@ var assert = require('assert');
 var fs = require('fs');
 var VMTranslator = require('../VMTranslator');
 var Parser = require('../Parser');
+var CodeWriter = require('../CodeWriter');
 
 describe('VMTranslator', function() {
     describe('translate file', function() {
@@ -17,7 +18,7 @@ describe('VMTranslator', function() {
             assert(fs.existsSync(destFile));
             // clean up file
             fs.unlinkSync(destFile);
-            
+
         });
         it('should throw an error if the file/dir does not exist', function() {
             var file = './test/support/singleFile/WRONGFILENAME.vm';
@@ -40,8 +41,8 @@ describe('VMTranslator', function() {
             var t1 = new VMTranslator( file );
             assert.equal(t1.removeTrailingSlash(file), './test/support/multipleFiles');
         });
-     
-        
+
+
     });
     describe('translate a folder', function() {
         it('should create a file', function() {
@@ -63,9 +64,39 @@ describe('VMTranslator', function() {
     describe('translate and array of instructions', function() {
         it('should return an array', function() {
             var file = './test/support/singleFile/singleFile.vm';
-            var parser = new Parser( file );
-            console.log(parser.commands);
-            
+            var translator = new VMTranslator( file );
+            var actual = translator.translate();
+            var expected = [ "@0", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1" ];
+
+            assert.deepEqual(actual, expected);
+        });
+    });
+    describe('simple or', function() {
+        it('correctly ', function() {
+            var file = './test/support/simpleOr/SimpleOr.vm';
+            var translator = new VMTranslator( file );
+            var actual = translator.translate();
+            var expected = [
+                "@0", "D=A", "@SP", "A=M", "M=D", 
+                "@SP", "M=M+1", "@0", "D=A", 
+                "@SP", "A=M", "M=D", 
+                "@SP", "M=M+1", "@SP",
+                "M=M-1", "@SP", "A=M",
+                "D=M", "@SP", "M=M-1", 
+                "@SP", "A=M", "D=D|M",
+                "D=-D", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1","D=-1", "@SP",
+                "A=M","M=D", "@SP",
+                "M=M+1","@SP", "M=M-1",
+                "@SP","A=M", "D=M",
+                "@SP","M=M-1", "@SP",
+                "A=M","D=D|M", "D=-D",
+                "@SP","A=M", "M=D",
+                "@SP","M=M+1"
+            ];
+
+            assert.deepEqual(actual, expected);
         });
     });
 });
