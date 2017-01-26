@@ -240,7 +240,7 @@ describe("Writing code", function() {
                 "// and", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1",  "@SP", "A=M",
-                "D=D&M", "D=-D", "@SP", "A=M",
+                "D=D&M", "@SP", "A=M",
                 "M=D", "@SP", "M=M+1"
 
             ];
@@ -252,7 +252,7 @@ describe("Writing code", function() {
                 "// or", "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
-                "D=D|M", "D=-D", "@SP",
+                "D=D|M", "@SP",
                 "A=M", "M=D", "@SP",
                 "M=M+1"
             ];

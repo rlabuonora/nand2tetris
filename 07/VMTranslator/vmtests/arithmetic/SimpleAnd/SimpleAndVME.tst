@@ -5,7 +5,7 @@
 
 load SimpleAnd.vm,
 output-file SimpleAnd.cmp,
-output-list RAM[0]%D2.6.2 RAM[256]%D2.6.2;
+output-list RAM[0]%D2.6.2 RAM[256]%D2.6.2 RAM[257]%D2.6.2;
 
 set RAM[0] 256,
 
