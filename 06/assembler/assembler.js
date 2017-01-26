@@ -55,8 +55,6 @@ var assembler = {
         });        
 
     }
-
-
 }
 
 var args =process.argv.slice(2);

@@ -1,5 +1,7 @@
 var fs = require('fs');
 var path = require('path');
+var CodeWriter = require('./CodeWriter');
+var Parser = require('./Parser');
 
 function VMTranslator( sourcePath ) {
     this.files;
@@ -16,7 +18,7 @@ function VMTranslator( sourcePath ) {
         var dest = this.destinationPath + "/" + this.objectFileName;
         fs.writeFile(dest, assemblerCode , function (err) {
             if (err) return console.log(err);
-        });        
+        });
     };
 
     this.removeTrailingSlash = function (sourcePath ) {
@@ -24,29 +26,55 @@ function VMTranslator( sourcePath ) {
         else return sourcePath;
     };
 
-    var sourcePath = this.removeTrailingSlash( sourcePath );
-    // constructor code
-    var stats = fs.statSync( sourcePath );
-    // if is directory
-    if (stats.isDirectory()) {
-        this.files = fs.readdirSync( sourcePath )
-            .filter(function(file) { return path.extname(file) === ".vm"; })
-            .map(function(file) { return sourcePath + "/" + file; });
-        this.destinationPath = sourcePath;
-        this.objectFileName = this.getObjectFileNameFromPath( sourcePath );
-    } // if is a single file
-    else if (stats.isFile()) {
-        this.files = [ sourcePath ];
-        this.destinationPath = path.dirname( sourcePath );
-        this.objectFileName = this.getObjectFileNameFromFile( sourcePath );
+
+    this.initializeFromPath = function( sourcePath ) {
+        // sets instance variables
+        // if is directory
+        var stats = fs.statSync( sourcePath );
+        if (stats.isDirectory()) {
+            this.files = fs.readdirSync( sourcePath )
+                .filter(function(file) { return path.extname(file) === ".vm"; })
+                .map(function(file) { return sourcePath + "/" + file; });
+            this.destinationPath = sourcePath;
+            this.objectFileName = this.getObjectFileNameFromPath( sourcePath );
+        } // if is a single file
+        else if (stats.isFile()) {
+            this.files = [ sourcePath ];
+            this.destinationPath = path.dirname( sourcePath );
+            this.objectFileName = this.getObjectFileNameFromFile( sourcePath );
+        }
     }
-    this.saveFile("assembler commands");
+
+    this.translateInstructions = function( arr, codeWriter ) {
+        // translates an array of instructions
+        arr.reduce(function(a, b) {
+            return a.concat(codeWriter.writeAssembly(b));
+        });
+    }
+    var sourcePath = this.removeTrailingSlash( sourcePath );
+    this.initializeFromPath( sourcePath )
+
+    // create new Code writer
+    var codeWriter = new CodeWriter();
+    var assemblerCommands = this.files.map(function(file) {
+        var parser = new Parser( file );
+        return parser.commands.map( function( command ) {
+            return codeWriter.writeAssembly( command );
+        } )
+    })
+
+    // TODO: clean up using reduce + map
+    const flatten = arr => arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+    var a = flatten(assemblerCommands).join("\n");
+
+    // save to file
+    this.saveFile(a);
 }
 
 
 if (require.main === module) {
     var args =process.argv.slice(2);
-    var t = new VMTranslator(args[0]);    
+    var t = new VMTranslator(args[0]);
 } else {
     module.exports = VMTranslator;
 }

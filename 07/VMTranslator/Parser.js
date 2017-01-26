@@ -5,7 +5,7 @@ function Parser( file ) {
     this.commands;
 
     this.preprocessLine =  function( str ) {
-        var re = /\/\/.*\r/;
+        var re = /\/\/.*\r?$/;
         var newLine = str.replace(re, "").trim();
         return newLine;
     };

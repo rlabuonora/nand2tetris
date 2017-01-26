@@ -1,6 +1,7 @@
 var assert = require('assert');
 var fs = require('fs');
 var VMTranslator = require('../VMTranslator');
+var Parser = require('../Parser');
 
 describe('VMTranslator', function() {
     describe('translate file', function() {
@@ -57,8 +58,14 @@ describe('VMTranslator', function() {
             assert(fs.existsSync(file));
             fs.unlinkSync(file);
         });
-        // how do I test that I have read all the files in the folder
-        // TODO use translation to make sure we translate all of the files
-        
+    });
+
+    describe('translate and array of instructions', function() {
+        it('should return an array', function() {
+            var file = './test/support/singleFile/singleFile.vm';
+            var parser = new Parser( file );
+            console.log(parser.commands);
+            
+        });
     });
 });
