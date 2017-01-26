@@ -165,7 +165,7 @@ describe("Writing code", function() {
         it("neg", function() {
             var actual = codeWriter.writeAssembly("neg");
             var expected = [
-                "// neg", "@SP", "M=M-1", "A=M",
+                "// neg", "@SP", "M=M-1", "@SP", "A=M",
                 "D=-M", "@SP", "A=M",
                 "M=D", "@SP", "M=M+1"
             ];

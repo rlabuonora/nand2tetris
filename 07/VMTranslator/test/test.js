@@ -80,4 +80,22 @@ describe('VMTranslator', function() {
             assert.deepEqual(actual, expected);
         });
     });
+    describe('simple and', function() {
+        it('correctly ', function() {
+            var vmFile = './test/support/simpleAnd/SimpleAnd.vm';
+            var correctFile = './test/support/simpleAnd/SimpleAndCorrect.asm';
+            var actual = new VMTranslator( vmFile ).translate();
+            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
+            assert.deepEqual(actual, expected);
+        });
+    });
+    describe('simple neg', function() {
+        it('correctly ', function() {
+            var vmFile = './test/support/simpleNeg/SimpleNeg.vm';
+            var correctFile = './test/support/simpleNeg/SimpleNegCorrect.asm';
+            var actual = new VMTranslator( vmFile ).translate();
+            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
+            assert.deepEqual(actual, expected);
+        });
+    });
 });

@@ -80,7 +80,7 @@ function CodeWriter() {
 
     this.neg = function() {
         return [
-            "@SP", "M=M-1", "A=M",
+            "@SP", "M=M-1", "@SP", "A=M",
             "D=-M", "@SP", "A=M",
             "M=D", "@SP", "M=M+1"
         ];
