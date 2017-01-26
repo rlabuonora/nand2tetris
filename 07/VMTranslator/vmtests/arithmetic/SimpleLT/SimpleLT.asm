@@ -1,5 +1,5 @@
 // push constant 7
-@7
+@8
 D=A
 @SP
 A=M
@@ -8,7 +8,7 @@ M=D
 M=M+1
 
 // push constant 8
-@8
+@7
 D=A
 @SP
 A=M

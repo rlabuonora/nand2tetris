@@ -1,8 +1,9 @@
 function CodeWriter() {
     this.fileName = "";
+    this.labelCount = {};
     this.segmentCodes = { "local": "LCL", "argument": "ARG",
                           "this": "THIS", "that": "THAT" };
-    
+
     this.commandType = function( str ) {
         var arithmeticCommands = ["add", "sub", "neg", "eq",
                                   "gt", "lt", "and", "or", "not"];
@@ -14,6 +15,16 @@ function CodeWriter() {
             if (first === "push") return "C_PUSH";
             else if (first === "pop") return "C_POP";
         }
+    };
+
+    this.getLabel = function( str ) {
+
+        var count = this.labelCount[str] === undefined ? 0 : this.labelCount[str];
+        this.labelCount[str] = count+1;
+        return {aCommand: "@" + str + "_" + (count), label: "(" + str + "_" + (count) + ")" };
+ 
+
+
     };
 
     this.arg1 = function( str ) {
@@ -54,7 +65,7 @@ function CodeWriter() {
             "M=M-1", "@SP", "A=M",
             "D=D|M", "D=-D", "@SP",
             "A=M", "M=D", "@SP",
-            "M=M+1" 
+            "M=M+1"
         ];
         if (arg === "and") { base[9] = "D=D&M"; }
         return base;
@@ -62,10 +73,10 @@ function CodeWriter() {
 
     this.not = function() {
         return ["@SP", "M=M-1", "@SP",
-        "A=M","D=!M", "@SP",
-        "A=M","M=D", "@SP",
-        "M=M+1"]
-    }
+                "A=M","D=!M", "@SP",
+                "A=M","M=D", "@SP",
+                "M=M+1"]
+    };
 
     this.neg = function() {
         return [
@@ -73,7 +84,44 @@ function CodeWriter() {
             "D=-M", "@SP", "A=M",
             "M=D", "@SP", "M=M+1"
         ];
-    }
+    };
+    this.eq = function() {
+        var neqLabel = this.getLabel("NEQ");
+        var endLabel = this.getLabel("END");
+        return [
+            "@SP", "M=M-1", "@SP",
+            "A=M", "D=M", "@SP",
+            "M=M-1", "@SP", "A=M",
+            "D=D-M",
+            neqLabel.aCommand,
+            "D;JNE",
+            "@0", "D=A", "@SP",
+            "A=M", "M=D", "@SP",
+            "M=M+1",
+            endLabel.aCommand,
+            "0;JMP",
+            neqLabel.label,
+            "@-1", "D=A",
+            "@SP", "A=M", "M=D",
+            "@SP", "M=M+1",
+            endLabel.label
+        ];
+    };
+    this.ltGt = function( arg ) {
+        var base = [
+            "@SP", "M=M-1", "@SP",
+            "A=M", "D=M", "@SP",
+            "M=M-1", "@SP", "A=M",
+            "D=M-D ", "@TRUE_0", "D;JGT ",
+            "@SP", "A=M", "M=0",
+            "@SP", "M=M+1", "@END_0",
+            "0;JMP", "(TRUE_0)", "@SP",
+            "A=M", "M=-1", "@SP",
+            "M=M+1", "(END_0)"
+        ];
+        if (arg==="lt") base[11] = "D;JLT";
+        return base;
+    };
 
     this.writeArithmetic = function( vmCommand ) {
         var arg1 = this.arg1( vmCommand);
@@ -83,11 +131,17 @@ function CodeWriter() {
         else if (arg1 === "and" || arg1 === "or" ) {
             return this.andOrOr( arg1 );
         }
+        else if (arg1 === "lt" || arg1 === "gt" ) {
+            return this.ltGt( arg1 );
+        }
         else if (arg1 === "not") {
             return this.not();
         }
         else if (arg1 === "neg") {
             return this.neg();
+        }
+        else if (arg1 === "eq") {
+            return this.eq();
         }
     };
 

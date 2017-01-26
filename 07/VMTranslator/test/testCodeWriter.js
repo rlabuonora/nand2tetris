@@ -161,42 +161,66 @@ describe("Writing code", function() {
             ];
             assert.deepEqual(actual, expected);
         });
-        xit("eq", function() {
+        it("eq", function() {
+            var codeWriter = new CodeWriter();
             var actual = codeWriter.writeAssembly("eq");
-            // if we have to ands it breaks down !!
             var expected = [
                 "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
-                "D=D-M", "@NEQ", "D;JNE",
+                "D=D-M", "@NEQ_0", "D;JNE",
                 "@0", "D=A", "@SP",
                 "A=M", "M=D", "@SP",
-                "M=M+1", "@END", "0;JMP",
-                "(NEQ)", "@-1", "D=A",
+                "M=M+1", "@END_0", "0;JMP",
+                "(NEQ_0)", "@-1", "D=A",
                 "@SP", "A=M", "M=D",
-                "@SP", "M=M+1", "(END)"
+                "@SP", "M=M+1", "(END_0)"
+            ];
+            assert.deepEqual(actual, expected);
+            actual = codeWriter.writeAssembly("eq");
+            var expected = [
+                "@SP", "M=M-1", "@SP",
+                "A=M", "D=M", "@SP",
+                "M=M-1", "@SP", "A=M",
+                "D=D-M", "@NEQ_1", "D;JNE",
+                "@0", "D=A", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1", "@END_1", "0;JMP",
+                "(NEQ_1)", "@-1", "D=A",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "(END_1)"
             ];
             assert.deepEqual(actual, expected);
         });
-        xit("gt", function() {
+        it("gt", function() {
             var actual = codeWriter.writeAssembly("gt");
             // if we have to ands it breaks down !!
             var expected = [
                 "@SP", "M=M-1", "@SP",
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
-                "D=M-D ", "@PUSH_TRUE", "D;JGT ",
+                "D=M-D ", "@TRUE_0", "D;JGT ",
                 "@SP", "A=M", "M=0",
-                "@SP", "M=M+1", "@END_IF",
-                "0;JMP", "(PUSH_TRUE)", "@SP",
+                "@SP", "M=M+1", "@END_0",
+                "0;JMP", "(TRUE_0)", "@SP",
                 "A=M", "M=-1", "@SP",
-                "M=M+1", "(END_IF)"
+                "M=M+1", "(END_0)"
             ];
             assert.deepEqual(actual, expected);
         });
-        xit("lt", function() {
+        it("lt", function() {
             var actual = codeWriter.writeAssembly("lt");
             var expected = [
+                "@SP", "M=M-1", "@SP",
+                "A=M", "D=M", "@SP",
+                "M=M-1", "@SP", "A=M",
+                "D=M-D ", "@TRUE_0",
+                "D;JLT",
+                "@SP", "A=M", "M=0",
+                "@SP", "M=M+1", "@END_0",
+                "0;JMP", "(TRUE_0)", "@SP",
+                "A=M", "M=-1", "@SP",
+                "M=M+1", "(END_0)"
             ];
             assert.deepEqual(actual, expected);
         });
@@ -275,7 +299,18 @@ describe('args', function() {
         });
     });
 });
+describe('Labels', function() {
 
+    it("keeps state", function() {
+        var codeWriter = new CodeWriter();
+        var firstLabel = codeWriter.getLabel("Hello");
+        assert.equal(firstLabel.aCommand, "@Hello_0");
+        assert.equal(firstLabel.label, "(Hello_0)");
+        var secondLabel = codeWriter.getLabel("Hello");
+        assert.equal(secondLabel.aCommand, "@Hello_1");
+        assert.equal(secondLabel.label, "(Hello_1)");
+    });
+});
 describe('Command Type', function() {
     var codeWriter = new CodeWriter();
     it("C_ARITHMETIC", function() {
