@@ -63,8 +63,8 @@ function VMTranslator( sourcePath ) {
     var sourcePath = this.removeTrailingSlash( sourcePath );
     this.initializeFromPath( sourcePath )
     // save to file
-    var translation = this.translate();
-    this.saveFile("algo");
+    var translation = this.translate().join("\r");;
+    this.saveFile(translation);
 }
 
 

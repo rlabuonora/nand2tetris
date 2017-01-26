@@ -66,36 +66,17 @@ describe('VMTranslator', function() {
             var file = './test/support/singleFile/singleFile.vm';
             var translator = new VMTranslator( file );
             var actual = translator.translate();
-            var expected = [ "@0", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1" ];
+            var expected = [ "// push constant 0", "@0", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1" ];
 
             assert.deepEqual(actual, expected);
         });
     });
     describe('simple or', function() {
         it('correctly ', function() {
-            var file = './test/support/simpleOr/SimpleOr.vm';
-            var translator = new VMTranslator( file );
-            var actual = translator.translate();
-            var expected = [
-                "@0", "D=A", "@SP", "A=M", "M=D", 
-                "@SP", "M=M+1", "@0", "D=A", 
-                "@SP", "A=M", "M=D", 
-                "@SP", "M=M+1", "@SP",
-                "M=M-1", "@SP", "A=M",
-                "D=M", "@SP", "M=M-1", 
-                "@SP", "A=M", "D=D|M",
-                "D=-D", "@SP",
-                "A=M", "M=D", "@SP",
-                "M=M+1","D=-1", "@SP",
-                "A=M","M=D", "@SP",
-                "M=M+1","@SP", "M=M-1",
-                "@SP","A=M", "D=M",
-                "@SP","M=M-1", "@SP",
-                "A=M","D=D|M", "D=-D",
-                "@SP","A=M", "M=D",
-                "@SP","M=M+1"
-            ];
-
+            var vmFile = './test/support/simpleOr/SimpleOr.vm';
+            var correctFile = './test/support/simpleOr/SimpleOrCorrect.asm';
+            var actual = new VMTranslator( vmFile ).translate();
+            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
             assert.deepEqual(actual, expected);
         });
     });
