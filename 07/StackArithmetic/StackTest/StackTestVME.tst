@@ -10,7 +10,7 @@ output-list RAM[0]%D2.6.2
 
 set RAM[0] 256,
 
-repeat 12 {
+repeat 38 {
   vmstep;
 }
 
