@@ -10,7 +10,7 @@ repeat 31 {
 }
 output;
 
-repeat 25 {
+repeat 40 {
 
   ticktock;
 }

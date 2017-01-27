@@ -1,0 +1,1 @@
+// push constant 18@18D=A@SPA=MM=D@SPM=M+1// push constant 17@17D=A@SPA=MM=D@SPM=M+1// gt@SPM=M-1@SPA=MD=M@SPM=M-1@SPA=MD=M-D @TRUE_0D;JGT @SPA=MM=0@SPM=M+1@END_00;JMP(TRUE_0)@SPA=MM=-1@SPM=M+1(END_0)

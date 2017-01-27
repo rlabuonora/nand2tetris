@@ -95,29 +95,37 @@ function CodeWriter() {
             "D=D-M",
             neqLabel.aCommand,
             "D;JNE",
-            "@0", "D=A", "@SP",
+            "D=-1", "@SP",
             "A=M", "M=D", "@SP",
             "M=M+1",
             endLabel.aCommand,
             "0;JMP",
             neqLabel.label,
-            "@-1", "D=A",
+            "D=0",
             "@SP", "A=M", "M=D",
             "@SP", "M=M+1",
             endLabel.label
         ];
     };
     this.ltGt = function( arg ) {
+        var trueLabel = this.getLabel("TRUE");
+        var endLabel = this.getLabel("END");
         var base = [
             "@SP", "M=M-1", "@SP",
             "A=M", "D=M", "@SP",
             "M=M-1", "@SP", "A=M",
-            "D=M-D ", "@TRUE_0", "D;JGT ",
+            "D=M-D ",
+            trueLabel.aCommand,
+            "D;JGT ",
             "@SP", "A=M", "M=0",
-            "@SP", "M=M+1", "@END_0",
-            "0;JMP", "(TRUE_0)", "@SP",
+            "@SP", "M=M+1",
+            endLabel.aCommand,
+            "0;JMP",
+            trueLabel.label,
+            "@SP",
             "A=M", "M=-1", "@SP",
-            "M=M+1", "(END_0)"
+            "M=M+1",
+            endLabel.label
         ];
         if (arg==="lt") base[11] = "D;JLT";
         return base;

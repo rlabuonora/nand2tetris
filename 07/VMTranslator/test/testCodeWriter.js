@@ -179,10 +179,10 @@ describe("Writing code", function() {
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=D-M", "@NEQ_0", "D;JNE",
-                "@0", "D=A", "@SP",
+                "D=-1", "@SP",
                 "A=M", "M=D", "@SP",
                 "M=M+1", "@END_0", "0;JMP",
-                "(NEQ_0)", "@-1", "D=A",
+                "(NEQ_0)", "D=0",
                 "@SP", "A=M", "M=D",
                 "@SP", "M=M+1", "(END_0)"
             ];
@@ -193,16 +193,17 @@ describe("Writing code", function() {
                 "A=M", "D=M", "@SP",
                 "M=M-1", "@SP", "A=M",
                 "D=D-M", "@NEQ_1", "D;JNE",
-                "@0", "D=A", "@SP",
+                "D=-1", "@SP",
                 "A=M", "M=D", "@SP",
                 "M=M+1", "@END_1", "0;JMP",
-                "(NEQ_1)", "@-1", "D=A",
+                "(NEQ_1)", "D=0",
                 "@SP", "A=M", "M=D",
                 "@SP", "M=M+1", "(END_1)"
             ];
             assert.deepEqual(actual, expected);
         });
         it("gt", function() {
+            var codeWriter = new CodeWriter();
             var actual = codeWriter.writeAssembly("gt");
             // if we have to ands it breaks down !!
             var expected = [
@@ -219,6 +220,7 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
         it("lt", function() {
+            var codeWriter = new CodeWriter();
             var actual = codeWriter.writeAssembly("lt");
             var expected = [
                 "// lt", "@SP", "M=M-1", "@SP",

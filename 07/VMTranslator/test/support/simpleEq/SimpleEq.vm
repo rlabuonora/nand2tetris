@@ -1,0 +1,3 @@
+push constant 17
+push constant 17
+eq
