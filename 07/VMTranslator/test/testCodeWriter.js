@@ -82,9 +82,63 @@ describe("Writing code", function() {
             ];
             assert.deepEqual(actual, expected);
         });
+        it('pointer', function() {
+            var actual = codeWriter.writeAssembly("push pointer 1");
+            var expected = [
+                "// push pointer 1",
+                "@THAT",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it('pointer', function() {
+            var actual = codeWriter.writeAssembly("push pointer 0");
+            var expected = [
+                "// push pointer 0",
+                "@THIS",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
+            ];
+            assert.deepEqual(actual, expected);
+        });
     });
     describe('popping', function() {
         var codeWriter = new CodeWriter();
+        it('pointer', function() {
+            var actual = codeWriter.writeAssembly("pop pointer 1");
+            var expected = [
+                "// pop pointer 1",
+                "@SP",
+                "M=M-1",
+                "A=M",
+                "D=M",
+                "@THAT",
+                "M=D"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it('pointer', function() {
+            var actual = codeWriter.writeAssembly("pop pointer 0");
+            var expected = [
+                "// pop pointer 0",
+                "@SP",
+                "M=M-1",
+                "A=M",
+                "D=M",
+                "@THIS",
+                "M=D"
+            ];
+            assert.deepEqual(actual, expected);
+        });
         it('local', function() {
             var actual = codeWriter.writeAssembly("pop local 0");
             var expected = [
@@ -132,6 +186,7 @@ describe("Writing code", function() {
             ];
             assert.deepEqual(actual, expected);
         });
+
     });
 
     describe('arithmetic commands', function() {
@@ -220,7 +275,6 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
         it("lt", function() {
-            var codeWriter = new CodeWriter();
             var actual = codeWriter.writeAssembly("lt");
             var expected = [
                 "// lt", "@SP", "M=M-1", "@SP",

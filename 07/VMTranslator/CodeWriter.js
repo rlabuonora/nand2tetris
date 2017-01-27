@@ -22,8 +22,6 @@ function CodeWriter() {
         var count = this.labelCount[str] === undefined ? 0 : this.labelCount[str];
         this.labelCount[str] = count+1;
         return {aCommand: "@" + str + "_" + (count), label: "(" + str + "_" + (count) + ")" };
- 
-
 
     };
 
@@ -157,6 +155,13 @@ function CodeWriter() {
         if (segment === "temp") {
             var newOffset = 5 + parseInt(offset);
             var firstPart = ["@" + newOffset, "D=A"];
+        }
+        else if ( segment === "pointer") {
+            var base = ["@SP", "M=M-1",
+                    "A=M", "D=M",
+                        "@THAT", "M=D" ];
+            if (offset === "0") base[4] = "@THIS";
+            return base;
         } else {
             var segmentCode = this.segmentCodes[segment];
             var firstPart = ["@" + offset, "D=A", "@" + segmentCode, "D=D+M"];
@@ -179,7 +184,16 @@ function CodeWriter() {
         if (segment === "temp") {
             firstPart = ["@" + (5+parseInt(offset))];
 
-        } else {
+        }
+        else if (segment === "pointer" ) {
+            if (offset === "1") {
+                firstPart = ["@THAT"];
+            } else if ( offset === "0" ) {
+                firstPart = ["@THIS"];
+            }
+
+        }
+        else {
             var segment = this.segmentCodes[segment];
             firstPart =  ["@" + offset, "D=A", "@" + segment, "A=D+M"]
         }
