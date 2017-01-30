@@ -42,6 +42,22 @@ describe("Writing code", function() {
             ];
             assert.deepEqual(actual, expected);
         });
+        it('static', function() {
+            var codeWriter = new CodeWriter();
+            codeWriter.fileName = "StaticTest"
+            var actual = codeWriter.writeAssembly("push static 1");
+            var expected = [
+                "// push static 1",
+                "@StaticTest.1",
+                "D=M",
+                "@SP",
+                "A=M",
+                "M=D",
+                "@SP",
+                "M=M+1"
+            ];
+            assert.deepEqual(actual, expected);
+        });
         it('that', function() {
             var actual = codeWriter.writeAssembly("push that 5");
             var expected = [
@@ -113,6 +129,7 @@ describe("Writing code", function() {
     });
     describe('popping', function() {
         var codeWriter = new CodeWriter();
+        codeWriter.fileName = "StaticTest"
         it('pointer', function() {
             var actual = codeWriter.writeAssembly("pop pointer 1");
             var expected = [
@@ -122,6 +139,19 @@ describe("Writing code", function() {
                 "A=M",
                 "D=M",
                 "@THAT",
+                "M=D"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it('static', function() {
+            var actual = codeWriter.writeAssembly("pop static 8");
+            var expected = [
+                "// pop static 8",
+                "@SP",
+                "M=M-1",
+                "A=M",
+                "D=M",
+                "@StaticTest.8",
                 "M=D"
             ];
             assert.deepEqual(actual, expected);

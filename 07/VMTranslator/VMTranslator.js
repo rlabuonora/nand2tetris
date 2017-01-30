@@ -52,19 +52,22 @@ function VMTranslator( sourcePath ) {
         }, []);
     };
     this.translate = function() {
+        var result;
         var codeWriter = new CodeWriter();
-        return this.files.reduce(function(a, b) {
+        result = this.files.reduce(function(a, b) {
             var parser = new Parser( b );
+            codeWriter.fileName = path.basename(b, ".vm");
             var commands = parser.commands;
             return a.concat(this.translateInstructions(commands, codeWriter));
         }.bind(this), []);
+        return result;
     }
 
     var sourcePath = this.removeTrailingSlash( sourcePath );
     this.initializeFromPath( sourcePath )
     // save to file
-    var translation = this.translate().join("\r");;
-    this.saveFile(translation);
+    var translation = this.translate();
+    this.saveFile(translation.join("\n"));
 }
 
 

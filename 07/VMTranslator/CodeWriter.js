@@ -151,17 +151,24 @@ function CodeWriter() {
         }
     };
 
+    this.popStaticOrPointer = function( segment, offset ) {
+        var base = ["@SP", "M=M-1",
+                    "A=M", "D=M",
+                    "@THAT", "M=D" ];
+        if (segment === "static") {
+            base[4] = "@"  + this.fileName + "." + offset;
+        }
+        else if ( segment === "pointer" && offset === "0") {
+            base[4] = "@THIS";
+        }
+        return base;
+    };
+
+
     this.popSegment = function(segment, offset) {
         if (segment === "temp") {
             var newOffset = 5 + parseInt(offset);
             var firstPart = ["@" + newOffset, "D=A"];
-        }
-        else if ( segment === "pointer") {
-            var base = ["@SP", "M=M-1",
-                    "A=M", "D=M",
-                        "@THAT", "M=D" ];
-            if (offset === "0") base[4] = "@THIS";
-            return base;
         } else {
             var segmentCode = this.segmentCodes[segment];
             var firstPart = ["@" + offset, "D=A", "@" + segmentCode, "D=D+M"];
@@ -184,6 +191,9 @@ function CodeWriter() {
         if (segment === "temp") {
             firstPart = ["@" + (5+parseInt(offset))];
 
+        }
+        else if (segment == "static" ) {
+            firstPart = ["@" + this.fileName + "." + offset];
         }
         else if (segment === "pointer" ) {
             if (offset === "1") {
@@ -227,7 +237,11 @@ function CodeWriter() {
         else if (type === "C_POP") {
             var segment = this.arg1( vmCommand);
             var offset = this.arg2( vmCommand );
-            return this.popSegment( segment, offset );
+            if (segment === "static" || segment === "pointer") {
+                return this.popStaticOrPointer(segment, offset);
+            } else {
+                return this.popSegment( segment, offset );
+            }
         }
     };
 }

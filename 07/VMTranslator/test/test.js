@@ -59,6 +59,14 @@ describe('VMTranslator', function() {
             assert(fs.existsSync(file));
             fs.unlinkSync(file);
         });
+        it('with static variables', function() {
+            // choose asm filename
+            var vmFile = './test/support/StaticTestMultipleFiles/';
+            var correctFile = './test/support/StaticTestMultipleFiles/correct.asm';
+            var actual = new VMTranslator( vmFile ).translate();
+            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
+            assert.deepEqual(actual, expected);
+        });
     });
 
     describe('translate and array of instructions', function() {
