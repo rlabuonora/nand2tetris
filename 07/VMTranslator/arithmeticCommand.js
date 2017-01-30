@@ -1,5 +1,5 @@
 var arithmeticCommand = {
-    this.addOrSub: function( arg ) {
+    addOrSub: function( arg ) {
         var base = [
             "@SP","M=M-1", "@SP",
             "A=M","D=M","@SP",
@@ -11,7 +11,7 @@ var arithmeticCommand = {
 
     },
 
-    this.andOrOr: function( arg ) {
+    andOrOr: function( arg ) {
         var base = [
             "@SP", "M=M-1", "@SP",
             "A=M", "D=M", "@SP",
@@ -24,23 +24,22 @@ var arithmeticCommand = {
         return base;
     },
 
-    this.not = function() {
+    not: function() {
         return ["@SP", "M=M-1", "@SP",
                 "A=M","D=!M", "@SP",
                 "A=M","M=D", "@SP",
                 "M=M+1"]
     },
 
-    this.neg: function() {
+    neg: function() {
         return [
             "@SP", "M=M-1", "@SP", "A=M",
             "D=-M", "@SP", "A=M",
             "M=D", "@SP", "M=M+1"
         ];
     },
-    this.eq: function() {
-        var neqLabel = this.getLabel("NEQ");
-        var endLabel = this.getLabel("END");
+    eq: function(neqLabel, endLabel) {
+        
         return [
             "@SP", "M=M-1", "@SP",
             "A=M", "D=M", "@SP",
@@ -60,9 +59,7 @@ var arithmeticCommand = {
             endLabel.label
         ];
     },
-    this.ltGt: function( arg ) {
-        var trueLabel = this.getLabel("TRUE");
-        var endLabel = this.getLabel("END");
+    ltGt: function( arg, trueLabel, endLabel ) {
         var base = [
             "@SP", "M=M-1", "@SP",
             "A=M", "D=M", "@SP",
@@ -82,7 +79,7 @@ var arithmeticCommand = {
         ];
         if (arg==="lt") base[11] = "D;JLT";
         return base;
-    };
+    }
 };
 
 module.exports = arithmeticCommand;

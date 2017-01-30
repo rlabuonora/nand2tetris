@@ -1,4 +1,5 @@
 var command = require('./command');
+var arithmeticCommand = require('./arithmeticCommand');
 
 function CodeWriter() {
     this.fileName = "";
@@ -21,22 +22,26 @@ function CodeWriter() {
     this.writeArithmetic = function( vmCommand ) {
         var arg1 = command.arg1( vmCommand);
         if (arg1 === "add" || arg1 === "sub") {
-            return this.addOrSub( arg1 );
+            return arithmeticCommand.addOrSub( arg1 );
         }
         else if (arg1 === "and" || arg1 === "or" ) {
-            return this.andOrOr( arg1 );
+            return arithmeticCommand.andOrOr( arg1 );
         }
         else if (arg1 === "lt" || arg1 === "gt" ) {
-            return this.ltGt( arg1 );
+            var trueLabel = this.getLabel("TRUE");
+            var endLabel = this.getLabel("END");
+            return arithmeticCommand.ltGt( arg1, trueLabel, endLabel);
         }
         else if (arg1 === "not") {
-            return this.not();
+            return arithmeticCommand.not();
         }
         else if (arg1 === "neg") {
-            return this.neg();
+            return arithmeticCommand.neg();
         }
         else if (arg1 === "eq") {
-            return this.eq();
+            var neqLabel = this.getLabel("NEQ");
+            var endLabel = this.getLabel("END");
+            return arithmeticCommand.eq(neqLabel, endLabel);
         }
     };
 
