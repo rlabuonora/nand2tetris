@@ -29,21 +29,7 @@ describe('VMTranslator', function() {
             assert.throws(function () { new VMTranslator( file ); }, Error);
         });
     });
-    describe('remove trailing slash', function() {
 
-        it("with trailing slash", function() {
-            var file = './test/support/multipleFiles/';
-            var t1 = new VMTranslator( file );
-            assert.equal(t1.removeTrailingSlash(file), './test/support/multipleFiles');
-        });
-        it("without trailing slash", function() {
-            var file = './test/support/multipleFiles';
-            var t1 = new VMTranslator( file );
-            assert.equal(t1.removeTrailingSlash(file), './test/support/multipleFiles');
-        });
-
-
-    });
     describe('translate a folder', function() {
         it('should create a file', function() {
             // choose asm filename

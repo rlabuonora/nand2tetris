@@ -1,48 +1,20 @@
+var command = require('./command');
+
 function CodeWriter() {
     this.fileName = "";
     this.labelCount = {};
     this.segmentCodes = { "local": "LCL", "argument": "ARG",
                           "this": "THIS", "that": "THAT" };
 
-    this.commandType = function( str ) {
-        var arithmeticCommands = ["add", "sub", "neg", "eq",
-                                  "gt", "lt", "and", "or", "not"];
-
-        if (arithmeticCommands.indexOf(str) >= 0) {
-            return "C_ARITHMETIC";
-        } else {
-            var first = str.split(" ")[0];
-            if (first === "push") return "C_PUSH";
-            else if (first === "pop") return "C_POP";
-        }
-    };
-
     this.getLabel = function( str ) {
 
-        var count = this.labelCount[str] === undefined ? 0 : this.labelCount[str];
+        var count = this.labelCount[str] === undefined ? 0
+                : this.labelCount[str];
         this.labelCount[str] = count+1;
-        return {aCommand: "@" + str + "_" + (count), label: "(" + str + "_" + (count) + ")" };
-
+        return {aCommand: "@" + str + "_" +
+                (count), label: "(" + str + "_" + (count) + ")" };
     };
 
-    this.arg1 = function( str ) {
-        // throw error y C_RETURN
-        var type = this.commandType(str);
-        if ( type === "C_RETURN") throw Error;
-        else if (type === "C_ARITHMETIC") return str;
-        else {
-            return str.split(" ")[1];
-        }
-    };
-
-    this.arg2 = function( str ) {
-        var type = this.commandType(str);
-        if (!(type === "C_PUSH" || type === "C_POP" ||
-              type === "C_FUNCTION" || type === "C_POP")) throw Error;
-        else {
-            return str.split(" ")[2];
-        }
-    };
 
     this.addOrSub = function( arg ) {
         var base = [
@@ -130,7 +102,7 @@ function CodeWriter() {
     };
 
     this.writeArithmetic = function( vmCommand ) {
-        var arg1 = this.arg1( vmCommand);
+        var arg1 = command.arg1( vmCommand);
         if (arg1 === "add" || arg1 === "sub") {
             return this.addOrSub( arg1 );
         }
@@ -210,33 +182,37 @@ function CodeWriter() {
         var secondPart = ["D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"];
         return  firstPart.concat(secondPart);
     };
+
     this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
-        var result = [];
-        var type = this.commandType( vmCommand );
-        if (type === "C_PUSH" || type === "C_POP") result =  this.writePushPop( vmCommand );
-        else if (type === "C_ARITHMETIC") result =  this.writeArithmetic( vmCommand );
-        result.unshift("// " + vmCommand);
+        var result = ["// " + vmCommand];
+        var type = command.commandType( vmCommand );
+        if (type === "C_PUSH" || type === "C_POP") {
+            result = result.concat(this.writePushPop( vmCommand ));
+        }
+        else if (type === "C_ARITHMETIC") {
+            result = result.concat(this.writeArithmetic( vmCommand ));
+        }
         return result;
     };
 
     this.writePushPop = function( vmCommand ) {
-        var type = this.commandType( vmCommand );
+        var type = command.commandType( vmCommand );
         if (type === "C_PUSH") {
-            var segment = this.arg1( vmCommand);
+            var segment = command.arg1( vmCommand);
             if (segment === "constant") {
-                var constant = this.arg2( vmCommand );
+                var constant = command.arg2( vmCommand );
                 return this.pushConstant( constant  );
             } else {
-                var segment = this.arg1( vmCommand );
-                var offset = this.arg2( vmCommand );
+                var segment = command.arg1( vmCommand );
+                var offset = command.arg2( vmCommand );
                 return this.pushSegment(segment, offset);
             }
         }
         else if (type === "C_POP") {
-            var segment = this.arg1( vmCommand);
-            var offset = this.arg2( vmCommand );
+            var segment = command.arg1( vmCommand);
+            var offset = command.arg2( vmCommand );
             if (segment === "static" || segment === "pointer") {
                 return this.popStaticOrPointer(segment, offset);
             } else {
@@ -245,6 +221,5 @@ function CodeWriter() {
         }
     };
 }
-
 
 module.exports = CodeWriter;
