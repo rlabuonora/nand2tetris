@@ -45,16 +45,21 @@ function CodeWriter() {
         }
     };
 
-    this.popStaticOrPointer = function( segment, offset ) {
-        var base = ["@SP", "M=M-1",
-                    "A=M", "D=M",
-                    "@THAT", "M=D" ];
-        if (segment === "static") {
-            base[4] = "@"  + this.fileName + "." + offset;
-        }
-        else if ( segment === "pointer" && offset === "0") {
-            base[4] = "@THIS";
-        }
+    this.popPointerThis = function() {
+        var base = this.popPointerThat();
+        base[4] = "@THIS";
+        return base;
+    };
+
+    this.popPointerThat = function() {
+        return ["@SP", "M=M-1",
+                "A=M", "D=M",
+                "@THAT", "M=D" ];
+    };
+
+    this.popStatic = function( offset, fileName ) {
+        var base = this.popPointerThat();
+        base[4] = "@"  + fileName + "." + offset;
         return base;
     };
 
@@ -135,9 +140,15 @@ function CodeWriter() {
         else if (type === "C_POP") {
             var segment = command.arg1( vmCommand);
             var offset = command.arg2( vmCommand );
-            if (segment === "static" || segment === "pointer") {
-                return this.popStaticOrPointer(segment, offset);
-            } else {
+            
+            if (segment === "pointer") {
+                if (offset === "0") return this.popPointerThis();
+                else if (offset === "1") return this.popPointerThat();
+            }
+            else if (segment === "static") {
+                return this.popStatic( offset, this.fileName );
+            }
+            else {
                 return this.popSegment( segment, offset );
             }
         }
