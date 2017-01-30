@@ -1,6 +1,7 @@
 var memoryAccessCommand = {
     segmentCodes: { "local": "LCL", "argument": "ARG",
                     "this": "THIS", "that": "THAT" },
+    
     popPointerThis: function() {
         var base = memoryAccessCommand.popPointerThat();
         base[4] = "@THIS";
