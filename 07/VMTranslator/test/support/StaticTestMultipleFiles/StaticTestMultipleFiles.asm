@@ -44,7 +44,7 @@ D=M
 @Bar.1
 M=D
 // push static 3
-@Bar.3
+@undefined.3
 D=M
 @SP
 A=M
@@ -52,7 +52,7 @@ M=D
 @SP
 M=M+1
 // push static 1
-@Bar.1
+@undefined.1
 D=M
 @SP
 A=M
@@ -75,7 +75,7 @@ M=D
 @SP
 M=M+1
 // push static 8
-@Bar.8
+@undefined.8
 D=M
 @SP
 A=M
@@ -143,7 +143,7 @@ D=M
 @Foo.1
 M=D
 // push static 3
-@Foo.3
+@undefined.3
 D=M
 @SP
 A=M
@@ -151,7 +151,7 @@ M=D
 @SP
 M=M+1
 // push static 1
-@Foo.1
+@undefined.1
 D=M
 @SP
 A=M
@@ -174,7 +174,7 @@ M=D
 @SP
 M=M+1
 // push static 8
-@Foo.8
+@undefined.8
 D=M
 @SP
 A=M
