@@ -108,7 +108,7 @@ D=D+M
 A=M
 M=D
 @SP
-M=M+1        
+M=M+1
 // pop argument 0
 @0
 D=A

@@ -356,6 +356,27 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
     });
+    describe("branching commands", function() {
+        var codeWriter = new CodeWriter();
+        it("if-goto", function() {
+            var command = "if-goto LOOP_START";
+            var actual = codeWriter.writeAssembly(command);
+            var expected = [
+                "// if-goto LOOP_START",
+                "@SP", "M=M-1",
+                "A=M", "D=M",
+                "@LOOP_START",
+                "D;JGT"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it("label", function() {
+            var command = "label LOOP_START";
+            var actual = codeWriter.writeAssembly(command);
+            var expected = [ "// label LOOP_START", "(LOOP_START)" ];
+            assert.deepEqual(actual, expected);
+        });
+    });
 });
 
 

@@ -8,6 +8,8 @@ var command = {
         } else {
             var first = str.split(" ")[0];
             if (first === "push") return "C_PUSH";
+            else if (first === "if-goto") return "C_GOTO";
+            else if (first === "label") return "C_LABEL";
             else if (first === "pop") return "C_POP";
         }
     },

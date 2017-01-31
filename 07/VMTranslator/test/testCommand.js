@@ -25,12 +25,16 @@ describe('Command Type', function() {
         var expected = "C_POP";
         assert.equal(actual, expected);
     });
-    // it("C_LABEL", function() {
-
-    // });
-    // it("C_GOTO", function() {
-
-    // });
+    it("C_LABEL", function() {
+        var actual = command.commandType("label LOOP_START");
+        var expected = "C_LABEL";
+        assert.equal(actual, expected);
+    });
+    it("C_GOTO", function() {
+        var actual = command.commandType("if-goto LOOP_START");
+        var expected = "C_GOTO";
+        assert.equal(actual, expected);
+    });
     // it("C_IF", function() {
 
     // });
@@ -68,11 +72,17 @@ describe('args', function() {
             assert.equal(expected, actual);
         });
     });
-    describe('arithmetic', function() {
-        it("arg1 of a add", function() {
-            var expected = "add";
-            var actual = command.arg1("add");
+    describe('branching', function() {
+        it("arg1 of a label", function() {
+            var expected = "LOOP_START";
+            var actual = command.arg1("label LOOP_START");
+            assert.equal(expected, actual);
+        });
+        it("arg1 of if-goto", function() {
+            var expected = "LOOP_START";
+            var actual = command.arg1("if-goto LOOP_START");
             assert.equal(expected, actual);
         });
     });
+    
 });

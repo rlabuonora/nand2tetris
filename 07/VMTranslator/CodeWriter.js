@@ -1,6 +1,7 @@
 var command = require('./command');
 var arithmeticCommand = require('./arithmeticCommand');
 var memoryAccessCommand = require('./memoryAccessCommand');
+var branchingCommand = require('./branchingCommand');
 
 function CodeWriter() {
     this.fileName = "";
@@ -74,9 +75,23 @@ function CodeWriter() {
             }
         }
     };
+    this.writeBranching = function( vmCommand ) {
+
+        var label = command.arg1( vmCommand );
+        var type = command.commandType( vmCommand );
+        if (type === "C_GOTO") {
+            return branchingCommand.goto( label );
+        }
+        else if (type === "C_LABEL") {
+            return branchingCommand.label( label );
+        }
+
+        
+    }
     this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
+        // prepending the vm command as a comment 
         var result = ["// " + vmCommand];
         var type = command.commandType( vmCommand );
         if (type === "C_PUSH" || type === "C_POP") {
@@ -85,6 +100,11 @@ function CodeWriter() {
         else if (type === "C_ARITHMETIC") {
             result = result.concat(this.writeArithmetic( vmCommand ));
         }
+        else {
+            result = result.concat(this.writeBranching( vmCommand ));
+        }
+        
+     
         return result;
     };
 }
