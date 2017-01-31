@@ -31,13 +31,15 @@ describe('Command Type', function() {
         assert.equal(actual, expected);
     });
     it("C_GOTO", function() {
-        var actual = command.commandType("if-goto LOOP_START");
+        var actual = command.commandType("goto MAIN_LOOP_START");
         var expected = "C_GOTO";
         assert.equal(actual, expected);
     });
-    // it("C_IF", function() {
-
-    // });
+    it("C_IF", function() {
+        var actual = command.commandType("if-goto LOOP_START");
+        var expected = "C_IF";
+        assert.equal(actual, expected);
+    });
     // it("C_FUNCTION", function() {
 
     // });

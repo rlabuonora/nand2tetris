@@ -82,6 +82,9 @@ function CodeWriter() {
         if (type === "C_GOTO") {
             return branchingCommand.goto( label );
         }
+        else if (type === "C_IF") {
+            return branchingCommand.if( label );
+        }
         else if (type === "C_LABEL") {
             return branchingCommand.label( label );
         }
