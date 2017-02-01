@@ -92,4 +92,5 @@ describe('VMTranslator', function() {
             assert.deepEqual(actual, expected);
         });
     });
+
 });
