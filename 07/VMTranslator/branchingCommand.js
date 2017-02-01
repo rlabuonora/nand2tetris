@@ -1,5 +1,6 @@
 var branchingCommand = {
     goto: function( label ) {
+        
         return [
             "@MAIN_LOOP_START",
             "0;JMP"
