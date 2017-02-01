@@ -5,7 +5,7 @@ var command = {
 
         if (arithmeticCommands.indexOf(str) >= 0) {
             return "C_ARITHMETIC";
-            
+
         } else {
             var first = str.split(" ")[0];
             if (first === "push") return "C_PUSH";
@@ -30,7 +30,8 @@ var command = {
     arg2: function( str ) {
         var type = this.commandType(str);
         if (!(type === "C_PUSH" || type === "C_POP" ||
-              type === "C_FUNCTION" || type === "C_POP")) throw Error;
+              type === "C_FUNCTION" || type === "C_POP" ||
+              type === "C_CALL" )) throw Error;
         else {
             return str.split(" ")[2];
         }

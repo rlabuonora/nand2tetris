@@ -95,5 +95,18 @@ describe('args', function() {
             assert.equal(expected, actual);
         });
     });
+
+    describe('call', function() {
+        it("arg1 of call", function() {
+            var expected = "Sys.main";
+            var actual = command.arg1("call Sys.main 0");
+            assert.equal(expected, actual);
+        });
+        it("arg2 of call", function() {
+            var expected = "0";
+            var actual = command.arg2("call Sys.main 0");
+            assert.equal(expected, actual);
+        });
+    });
     
 });

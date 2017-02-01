@@ -77,16 +77,34 @@ function CodeWriter() {
     };
     this.writeBranching = function( vmCommand ) {
 
-        var label = command.arg1( vmCommand );
+        
         var type = command.commandType( vmCommand );
         if (type === "C_GOTO") {
+            var label = command.arg1( vmCommand );
             return branchingCommand.goto( label );
         }
         else if (type === "C_IF") {
+            var label = command.arg1( vmCommand );
             return branchingCommand.if( label );
         }
         else if (type === "C_LABEL") {
+            var label = command.arg1( vmCommand );
             return branchingCommand.label( label );
+        }
+        else if (type === "C_FUNCTION") {
+            var fName = command.arg1( vmCommand );
+            var locals = command.arg2( vmCommand);
+            this.currentFunction = fName;
+            return branchingCommand.functionDeclaration( fName, locals, memoryAccessCommand.pushConstant  );
+        }
+        else if (type === "C_RETURN") {
+            return branchingCommand.retr();
+        }
+        else if (type === "C_CALL") {
+            var callee = command.arg1( vmCommand );
+            var nArgs = command.arg2( vmCommand );
+            var callerLabel = this.getLabel( this.currentFunction );
+            return branchingCommand.cll(callee, nArgs, callerLabel );
         }
 
         

@@ -166,7 +166,7 @@ M=D
 // push constant 246
 @246
 D=A
-@SP
+@SP 
 A=M
 M=D
 @SP
