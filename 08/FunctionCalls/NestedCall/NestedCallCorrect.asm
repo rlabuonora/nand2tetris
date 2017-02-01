@@ -1,4 +1,4 @@
-// function Sys.init 0
+2// function Sys.init 0
 (Sys.init)
 // call Sys.main 0
   // push return address

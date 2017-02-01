@@ -5,6 +5,7 @@ var command = {
 
         if (arithmeticCommands.indexOf(str) >= 0) {
             return "C_ARITHMETIC";
+            
         } else {
             var first = str.split(" ")[0];
             if (first === "push") return "C_PUSH";
@@ -12,6 +13,9 @@ var command = {
             else if (first === "goto") return "C_GOTO";
             else if (first === "label") return "C_LABEL";
             else if (first === "pop") return "C_POP";
+            else if (first === "return") return "C_RETURN";
+            else if (first === "call") return "C_CALL";
+            else if (first === "function") return "C_FUNCTION";
         }
     },
     arg1: function( str ) {

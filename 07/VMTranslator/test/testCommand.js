@@ -40,12 +40,21 @@ describe('Command Type', function() {
         var expected = "C_IF";
         assert.equal(actual, expected);
     });
-    // it("C_FUNCTION", function() {
-
-    // });
-    // it("C_RETURN", function() {
-
-    // });
+    it("C_FUNCTION", function() {
+        var actual = command.commandType("function Sys.init 0");
+        var expected = "C_FUNCTION";
+        assert.equal(actual, expected);
+    });
+    it("C_RETURN", function() {
+        var actual = command.commandType("return");
+        var expected = "C_RETURN";
+        assert.equal(actual, expected);
+    });
+    it("C_CALL", function() {
+        var actual = command.commandType("call Sys.main 0");
+        var expected = "C_CALL";
+        assert.equal(actual, expected);
+    });
 
 });
 describe('args', function() {
