@@ -1,19 +1,24 @@
 var assert = require('assert');
 var fs = require('fs');
 var VMTranslator = require('../VMTranslator');
+const execSync = require('child_process').execSync;
+
 
 describe('acceptance test', function() {
-
+    
+    var helper = {
+        translateCommand: function(location, testName) { return "node VMTranslator.js " + location + "/" + testName + "/" + testName + ".vm"; },
+        compareCommand: function(location, testName) { return "CPUEmulator.sh " + location + "/" + testName + "/" + testName + ".tst"; }
+    };
 
     it('Basic Test', function() {
-        var testPath = "../MemoryAccess/BasicTest/";
-        var command = "node VMTranslator.js " + testPath;
-        const execSync = require('child_process').execSync;
-        
-        var a = execSync(command + "BasicTest.vm");
-        var b = execSync( "CPUEmulator.sh " + testPath + "BasicTest.tst" );
+        var location = "../MemoryAccess";
+        var testName = "BasicTest";
+        var translateCommand = helper.translateCommand( location, testName);
+        execSync( translateCommand );
+        var compareCommand = helper.compareCommand( location, testName );
+        var actual = execSync( compareCommand  ).toString();
         var expected = "End of script - Comparison ended successfully\n";
-        var actual = b.toString();
         assert.equal(actual, expected);
-        });
     });
+});
