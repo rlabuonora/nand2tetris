@@ -104,4 +104,16 @@ describe('Acceptance tests', function() {
             assert.equal(actual, expected);
         });
     });
+    describe("Function Calls", function() {
+        it("Nested Call", function() {
+            var location = "../../08/FunctionCalls";
+            var testName = "NestedCall";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+        });
+    });
 });

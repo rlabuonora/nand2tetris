@@ -2,7 +2,7 @@ var branchingCommand = {
     goto: function( label ) {
 
         return [
-            "@MAIN_LOOP_START",
+            "@" + label,
             "0;JMP"
         ];
     },
