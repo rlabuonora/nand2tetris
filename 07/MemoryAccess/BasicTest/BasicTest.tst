@@ -16,13 +16,8 @@ set RAM[2] 400,
 set RAM[3] 3000,
 set RAM[4] 3010,
 
-repeat 120 {
+repeat 600 {
   ticktock;
 }
 
-
-repeat 150 {
-  ticktock;
-}
-
-
+output;
