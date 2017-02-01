@@ -4,21 +4,81 @@ var VMTranslator = require('../VMTranslator');
 const execSync = require('child_process').execSync;
 
 
-describe('acceptance test', function() {
-    
+describe('Acceptance tests', function() {
+
     var helper = {
         translateCommand: function(location, testName) { return "node VMTranslator.js " + location + "/" + testName + "/" + testName + ".vm"; },
-        compareCommand: function(location, testName) { return "CPUEmulator.sh " + location + "/" + testName + "/" + testName + ".tst"; }
+        compareCommand: function(location, testName) { return "CPUEmulator.sh " + location + "/" + testName + "/" + testName + ".tst"; },
+        destinationFile: function(location, testName) {
+            return location +"/" + testName + "/" + testName + ".asm";
+        }
     };
+    describe('Memory Access', function() {
+        it('Basic Test', function() {
+            var location = "../MemoryAccess";
+            var testName = "BasicTest";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
+        it('Pointer Test', function() {
+            var location = "../MemoryAccess";
+            var testName = "PointerTest";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
+        it('Static Test', function() {
+            var location = "../MemoryAccess";
+            var testName = "StaticTest";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
+    });
 
-    it('Basic Test', function() {
-        var location = "../MemoryAccess";
-        var testName = "BasicTest";
-        var translateCommand = helper.translateCommand( location, testName);
-        execSync( translateCommand );
-        var compareCommand = helper.compareCommand( location, testName );
-        var actual = execSync( compareCommand  ).toString();
-        var expected = "End of script - Comparison ended successfully\n";
-        assert.equal(actual, expected);
+    describe('Stack Arithmetic', function() {
+        it('Simple Add', function() {
+            var location = "../StackArithmetic";
+            var testName = "SimpleAdd";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+        });
+        it('Simple Sub', function() {
+            var location = "../StackArithmetic";
+            var testName = "SimpleSub";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+        });
+        it('Stack Test', function() {
+            var location = "../StackArithmetic";
+            var testName = "StackTest";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+        });
     });
 });
