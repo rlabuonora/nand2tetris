@@ -1,8 +1,7 @@
 var parser = require('./parser');
 
-function SymbolTable( instructions ) {
-
-    this.symbols =   {
+function SymbolTable( instructions ) { // TODO add default argument
+    this.symbols = {
         "R0": "0", "R1": "1", "R2": "2", "R3": "3",
         "R4": "4", "R5": "5", "R6": "6", "R7": "7",
         "R8": "8", "R9": "9", "R10": "10", "R11": "11",
@@ -11,7 +10,7 @@ function SymbolTable( instructions ) {
         "ARG": "2", "THIS": "3", "THAT":"4"
     };
 
-    this.contains = function(symbol) {
+    this.contains  = function(symbol) {
         return !(this.symbols[symbol]===undefined);
     };
 
@@ -19,7 +18,7 @@ function SymbolTable( instructions ) {
         return this.symbols[symbol];
     };
 
-    this.addEntry =  function(symbol, address) {
+    this.addEntry = function(symbol, address) {
         this.symbols[symbol] = address;
     };
 
@@ -32,10 +31,9 @@ function SymbolTable( instructions ) {
             } else {
                 rom++;
             }
-
-        }
-    };
-    this.buildVariables = function(instructions) {
+        };
+    },
+    this.buildVariables = function( instructions ) {
         var ram=16;
         for (var i = 0; i < instructions.length; i++) {
             var type = parser.commandType(instructions[i]);
@@ -50,11 +48,16 @@ function SymbolTable( instructions ) {
                 }
             }
         };
-    };
+    },
 
-    this.buildLabels(instructions);
-    this.buildVariables(instructions);
+    this.build = function( instructions ) {
+        // labels
+        this.buildLabels(instructions);
+        this.buildVariables(instructions);
+    }
 
+    this.build( instructions );
+       
 }
 
 module.exports = SymbolTable;

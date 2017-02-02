@@ -1,29 +1,33 @@
 var assert = require('assert');
 var SymbolTable = require('../SymbolTable.js');
-var parser = require('../parser.js');
 
+var parser = require('../parser');
 describe('Symbol Table', function() {
     var symbolTable = new SymbolTable( [] );
     
     it('has the predetermined symbols', function() {
         assert.equal(symbolTable.getAddress("R0"), "0");
     });
-
+    var symbolTable = new SymbolTable( [] );
+    it('has the predetermined symbols', function() {
+       
+        assert.equal(symbolTable.getAddress("R0"), "0");
+    });
     it("adds entries", function() {
         symbolTable.addEntry("LOOP", "10");
         assert.equal(symbolTable.getAddress("LOOP"), "10");
         assert.equal(symbolTable.getAddress("WRONG"), undefined);
     });
-
     it("contains", function() {
         assert.equal(symbolTable.contains("WRONG"), false);
         assert.equal(symbolTable.contains("R1"), true);
 
     });
+
     
     describe('Labels', function() {
-        it("Max.asm", function() {
-            var instructions = parser.preprocessFile('../max/Max.asm');
+        it("max.asm", function() {
+            var instructions = parser.preprocessFile( '../max/Max.asm' );
             var symbolTable = new SymbolTable( instructions );
             assert(symbolTable.contains("OUTPUT_FIRST"));
             assert(symbolTable.contains("OUTPUT_D"));
@@ -36,11 +40,10 @@ describe('Symbol Table', function() {
     });
     describe('Variables', function() {
         it("Rect.asm", function() {
-            var instructions = parser.preprocessFile('../rect/Rect.asm');
+            var instructions = parser.preprocessFile( '../rect/Rect.asm' );
             var symbolTable = new SymbolTable( instructions );
             assert(symbolTable.contains("counter"));
             assert(symbolTable.contains("address"));
-            assert(!symbolTable.contains("OUTPUT_FIRST"));
             assert.equal(symbolTable.getAddress("counter"), "16");
             assert.equal(symbolTable.getAddress("address"), "17");
         });
@@ -56,6 +59,5 @@ describe('Symbol Table', function() {
             assert.equal(symbolTable.getAddress("address.0"), "17");
         });
     });
-    
     
 });

@@ -28,40 +28,33 @@ var parser = {
         else if (str[0] === '(') return "L_COMMAND"
         else return "C_COMMAND";  //
     },
+
+
     symbol: function(str) {
         if (this.commandType(str)!="A_COMMAND") throw str;
         return str.substr(1, str.length-1);
     },
+    parseCmd: function( str ) {
+        var re = /(?:(MD|D|M|A|AM|AD|AMD)=)?([01DAM+\-&!\|]+)(?:;(JGT|JEQ|JGE|JLT|JNE|JLE|JMP|JNG))?/;
+        return str.match(re);
+    },
     dest: function(str) {
         if (this.commandType(str) != "C_COMMAND") throw str;
-        var eq = str.indexOf("=");
-        if (eq < 0) return null;
-        else {
-            return str.substr(0, eq);
-        }
+        var match = this.parseCmd( str )[1];
+        if (match === undefined) return null;
+        else return match;
     },
     comp: function(str) {
         if (this.commandType(str) != "C_COMMAND") throw "Error";
-        var eq = str.indexOf("=");
-        var semicol = str.indexOf(";");
-        var n = str.length;
-        if (eq > 0 && semicol > 0) {
-            return str.substr(eq+1, semicol-eq-1);
-        } else if (semicol < 0 && eq > 0) {
-            return str.substr(eq+1, n-eq-1);
-        } else if (semicol > 0 && eq < 0) {
-            return str.substr(0, semicol);
-        } else {
-            return str;
-        }
+        var match = this.parseCmd( str )[2];
+        if (match === undefined) return null;
+        else return match;
     },
     jump: function(str) {
         if (this.commandType(str) != "C_COMMAND") throw "Error";
-        var semicol = str.indexOf(";");
-        if (semicol < 0) return null;
-        else {
-            return str.substr(semicol+1, str.length-1);
-        }
+        var match = this.parseCmd( str )[3];
+        if (match === undefined) return null;
+        else return match;
     }
 };
 
