@@ -146,7 +146,7 @@ describe('translates a file with no symbols', function() {
 describe('translates a single instruction', function() {
     var assembler = new Assembler('../add/Add.asm');
     var symbolTable = new SymbolTable([]);
-    
+
     it("a-instruction", function() {
         assert.equal(assembler.translateInstruction("@2", symbolTable), "0000000000000010");
     });
@@ -161,4 +161,44 @@ describe('translates a single instruction', function() {
         assert.equal(assembler.translateInstruction("D;JGT", symbolTable), "1110001100000001");
         assert.equal(assembler.translateInstruction("0;JMP", symbolTable), "1110101010000111");
     });
+});
+describe('Acceptance tests', function() {
+    const execSync = require('child_process').execSync;
+    it('max', function() {
+        var translateCommand = "node Assembler.js ../max/Max.asm";
+        execSync( translateCommand );
+        var compareCommand = "TextComparer.sh ../max/Max.hack ../max/MyMax.hack";
+        var actual = execSync( compareCommand  ).toString();
+        var expected = "Comparison ended successfully\n";
+        assert.equal(actual, expected);
+        fs.unlink('../max/MyMax.hack');
+    });
+    it('add', function() {
+        var translateCommand = "node Assembler.js ../add/Add.asm";
+        execSync( translateCommand );
+        var compareCommand = "TextComparer.sh ../add/Add.hack ../add/MyAdd.hack";
+        var actual = execSync( compareCommand  ).toString();
+        var expected = "Comparison ended successfully\n";
+        assert.equal(actual, expected);
+        fs.unlink('../max/MyAdd.hack');
+    });
+    it('rect', function() {
+        var translateCommand = "node Assembler.js ../rect/Rect.asm";
+        execSync( translateCommand );
+        var compareCommand = "TextComparer.sh ../rect/Rect.hack ../rect/MyRect.hack";
+        var actual = execSync( compareCommand  ).toString();
+        var expected = "Comparison ended successfully\n";
+        assert.equal(actual, expected);
+        fs.unlink('../rect/MyRect.hack');
+    });
+    it('pong', function() {
+        var translateCommand = "node Assembler.js ../pong/Pong.asm";
+        execSync( translateCommand );
+        var compareCommand = "TextComparer.sh ../pong/Pong.hack ../pong/MyPong.hack";
+        var actual = execSync( compareCommand  ).toString();
+        var expected = "Comparison ended successfully\n";
+        assert.equal(actual, expected);
+        fs.unlink('../pong/MyPong.hack');
+    });
+
 });
