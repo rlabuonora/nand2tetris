@@ -59,6 +59,7 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
         it('Simple Sub', function() {
             var location = "../StackArithmetic";
@@ -69,6 +70,7 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
         it('Stack Test', function() {
             var location = "../StackArithmetic";
@@ -79,6 +81,7 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
     });
 
@@ -92,6 +95,7 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
         it('Fibonacci Series', function() {
             var location = "../../08/ProgramFlow";
@@ -102,6 +106,7 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
     });
     describe("Function Calls", function() {
@@ -114,6 +119,18 @@ describe('Acceptance tests', function() {
             var actual = execSync( compareCommand  ).toString();
             var expected = "End of script - Comparison ended successfully\n";
             assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
+        it("Fibonacci Element", function() {
+            var location = "../../08/FunctionCalls";
+            var testName = "FibonacciElement";
+            var translateCommand = "node VMTranslator.js ../../08/FunctionCalls/FibonacciElement";
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
         });
     });
 });
