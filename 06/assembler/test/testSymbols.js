@@ -3,8 +3,6 @@ var SymbolTable = require('../SymbolTable.js');
 var parser = require('../parser.js')
 
 describe('Symbol Table', function() {
-
-
     describe('Variables with dots', function() {
         it("Rect.asm", function() {
             var instructions = parser.preprocessFile('../rect/RectVars.asm');
@@ -15,6 +13,4 @@ describe('Symbol Table', function() {
             assert.equal(symbolTable.getAddress("address.0"), "17");
         });
     });
-    
-    
 });

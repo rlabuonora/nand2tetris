@@ -1,12 +1,14 @@
 var assert = require('assert');
-var assembler = require('../assembler.js');
+var Assembler = require('../Assembler');
+var SymbolTable = require('../SymbolTable');
 
 
 describe('Assembler', function() {
 
     describe('translates a file with symbols', function() {
         it("Max.asm", function() {
-            var actual = assembler.translateFile('../max/MaxL.asm');
+            var file = '../max/MaxL.asm';
+            var actual = new Assembler(file).translateFile(file);
             var expected = [
                 "0000000000000000",
                 "1111110000010000",
@@ -29,7 +31,7 @@ describe('Assembler', function() {
         });
     });
     it("Rect.asm", function() {
-        var actual = assembler.translateFile('../rect/Rect.asm');
+        var actual = new Assembler('../rect/Rect.asm').translateFile('../rect/Rect.asm');
         var expected = [
             "0000000000000000",
             "1111110000010000",
@@ -63,7 +65,7 @@ describe('Assembler', function() {
 
 describe('translates a file with no symbols', function() {
     it("add.asm", function() {
-        var actual = assembler.translateFile('../add/Add.asm');
+        var actual = new Assembler('../add/Add.asm').translateFile('../add/Add.asm');
         var expected = [
             "0000000000000010",
             "1110110000010000",
@@ -75,7 +77,7 @@ describe('translates a file with no symbols', function() {
         assert.deepEqual(actual, expected);
     });
     it("MaxL.asm", function() {
-        var actual = assembler.translateFile('../max/MaxL.asm');
+        var actual = new Assembler('../max/MaxL.asm').translateFile('../max/MaxL.asm');
         var expected = [
             "0000000000000000",
             "1111110000010000",
@@ -97,7 +99,7 @@ describe('translates a file with no symbols', function() {
         assert.deepEqual(actual, expected);
     });
     it("Add.asm", function() {
-        var actual = assembler.translateFile('../add/Add.asm');
+        var actual = new Assembler('../add/Add.asm').translateFile('../add/Add.asm');
         var expected = [
             "0000000000000010",
             "1110110000010000",
@@ -109,7 +111,7 @@ describe('translates a file with no symbols', function() {
         assert.deepEqual(actual, expected);
     });
     it("RectL.asm", function() {
-        var actual = assembler.translateFile('../rect/RectL.asm');
+        var actual = new Assembler('../rect/RectL.asm').translateFile('../rect/RectL.asm');
         var expected = [
             "0000000000000000",
             "1111110000010000",
@@ -141,20 +143,22 @@ describe('translates a file with no symbols', function() {
     });
 });
 
-// describe('translates a single instruction', function() {
-//     it("a-instruction", function() {
-//         assert.equal(assembler.translateInstruction("@2"), "0000000000000010");
-//     });
-//     it("a-instruction", function() {
-//         assert.equal(assembler.translateInstruction("@3"), "0000000000000011");
-//     });
-//     it("c-instruction", function() {
-//         assert.equal(assembler.translateInstruction("D=A"), "1110110000010000");
-//         assert.equal(assembler.translateInstruction("D=D+A"), "1110000010010000");
-//         assert.equal(assembler.translateInstruction("M=D"), "1110001100001000");
-//         assert.equal(assembler.translateInstruction("D=D-M"), "1111010011010000");
-//         assert.equal(assembler.translateInstruction("D;JGT"), "1110001100000001");
-//         assert.equal(assembler.translateInstruction("0;JMP"), "1110101010000111");
-//     });
-// });
-
+describe('translates a single instruction', function() {
+    var assembler = new Assembler('../add/Add.asm');
+    var symbolTable = new SymbolTable([]);
+    
+    it("a-instruction", function() {
+        assert.equal(assembler.translateInstruction("@2", symbolTable), "0000000000000010");
+    });
+    it("a-instruction", function() {
+        assert.equal(assembler.translateInstruction("@3", symbolTable), "0000000000000011");
+    });
+    it("c-instruction", function() {
+        assert.equal(assembler.translateInstruction("D=A", symbolTable), "1110110000010000");
+        assert.equal(assembler.translateInstruction("D=D+A", symbolTable), "1110000010010000");
+        assert.equal(assembler.translateInstruction("M=D", symbolTable), "1110001100001000");
+        assert.equal(assembler.translateInstruction("D=D-M", symbolTable), "1111010011010000");
+        assert.equal(assembler.translateInstruction("D;JGT", symbolTable), "1110001100000001");
+        assert.equal(assembler.translateInstruction("0;JMP", symbolTable), "1110101010000111");
+    });
+});

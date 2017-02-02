@@ -2,16 +2,16 @@ var code = require('./code');
 var parser = require('./parser');
 var SymbolTable = require('./SymbolTable');
 fs = require('fs');
+path = require('path');
 
-
-var assembler = {
-    translateCCommand: function(str) {
+function Assembler( file )  {
+    this.translateCCommand = function(str) {
         var compMemonic = parser.comp(str);
         var destMemonic = parser.dest(str);
         var jumpMemonic = parser.jump(str);
         return "111" + code.comp(compMemonic) + code.dest(destMemonic) + code.jump(jumpMemonic);
-    },
-    translateACommand: function(str, symbolTable) {
+    };
+    this.translateACommand = function(str, symbolTable) {
         var symbol = parser.symbol(str);
         if (symbolTable.contains(symbol)) {
             decimal = symbolTable.getAddress(symbol) * 1; // coerce to Number
@@ -20,8 +20,8 @@ var assembler = {
         }
 
         return ("0000000000000000" + decimal.toString(2)).slice(-16);
-    },
-    translateInstruction: function(str, symbolTable) { // get command type and forward to function
+    };
+    this.translateInstruction =  function(str, symbolTable) { // get command type and forward to function
         
         var type = parser.commandType(str);
         if (type==="C_COMMAND") {
@@ -29,8 +29,9 @@ var assembler = {
         } else { // A_INSTRUCTION
             return this.translateACommand(str, symbolTable);
         }
-    },
-    translateFile: function(file) { // returns an array of binary instructions
+    };
+    this.translateFile = function( file ) { // returns an array of binary instructions
+        this.destination = this.getDestination( file );
         var instructions = parser.preprocessFile( file );
         var symbolTable = new SymbolTable( instructions );
         // remove labels
@@ -41,26 +42,29 @@ var assembler = {
         var binary = instructions.map(function(instruction) {
             return this.translateInstruction(instruction, symbolTable);
         }.bind(this));
-        this.saveToFile(binary);
         return binary;
-    },
-    saveToFile(binaryInstructions) {
-        var str = binaryInstructions.join("\r");
-        fs.writeFile('output.hack', str , function (err) {
+    };
+    this.saveToFile = function( binaryInstructions, destination ) {
+        var str = binaryInstructions.join("\n") + "\n";
+        fs.writeFile(destination, str , function (err) {
             if (err) return console.log(err);
-            console.log('output file written  > output.hack');
         });        
-
     }
-
-
+    this.getDestination = function( file ) {
+        var dirname = path.dirname(file);
+        var filename = path.basename(file, '.asm');
+        return dirname + "/" + "My" + filename + ".hack";
+    };
+    var binaryInstructions = this.translateFile( file );
+    this.saveToFile(binaryInstructions, this.getDestination( file )); // TODO fix API for saving to file
 }
 
 if (require.main === module) {
     var args =process.argv.slice(2);
-    assembler.translateFile(args[0])
+    var assembler = new Assembler( args[0] );
+    // assembler.save();
 } else {
-    module.exports = assembler;
+    module.exports = Assembler;
 }
 
 

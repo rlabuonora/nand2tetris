@@ -34,7 +34,7 @@ function SymbolTable( instructions ) { // TODO add default argument
 
         };
     },
-    this.buildVariables = function(instructions) {
+    this.buildVariables = function( instructions ) {
         var ram=16;
         for (var i = 0; i < instructions.length; i++) {
             var type = parser.commandType(instructions[i]);
