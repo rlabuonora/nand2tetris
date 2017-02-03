@@ -1,11 +1,12 @@
 var command = require('./command');
 var arithmeticCommand = require('./arithmeticCommand');
 var memoryAccessCommand = require('./memoryAccessCommand');
+var branchingCommand = require('./branchingCommand');
 
 function CodeWriter() {
     this.fileName = "";
     this.labelCount = {};
-    
+
 
     this.getLabel = function( str ) {
 
@@ -61,7 +62,7 @@ function CodeWriter() {
         else if (type === "C_POP") {
             var segment = command.arg1( vmCommand);
             var offset = command.arg2( vmCommand );
-            
+
             if (segment === "pointer") {
                 if (offset === "0") return memoryAccessCommand.popPointerThis();
                 else if (offset === "1") return memoryAccessCommand.popPointerThat();
@@ -74,9 +75,44 @@ function CodeWriter() {
             }
         }
     };
+    this.writeBranching = function( vmCommand ) {
+
+
+        var type = command.commandType( vmCommand );
+        if (type === "C_GOTO") {
+            var label = command.arg1( vmCommand );
+            return branchingCommand.goto( label );
+        }
+        else if (type === "C_IF") {
+            var label = command.arg1( vmCommand );
+            return branchingCommand.if( label );
+        }
+        else if (type === "C_LABEL") {
+            var label = command.arg1( vmCommand );
+            return branchingCommand.label( label );
+        }
+        else if (type === "C_FUNCTION") {
+            var fName = command.arg1( vmCommand );
+            var locals = command.arg2( vmCommand);
+            this.currentFunction = fName;
+            return branchingCommand.functionDeclaration( fName, locals, memoryAccessCommand.pushConstant  );
+        }
+        else if (type === "C_RETURN") {
+            return branchingCommand.retr();
+        }
+        else if (type === "C_CALL") {
+            var callee = command.arg1( vmCommand );
+            var nArgs = command.arg2( vmCommand );
+            var callerLabel = this.getLabel( this.currentFunction );
+            return branchingCommand.cll(callee, nArgs, callerLabel );
+        }
+
+
+    }
     this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
+        // prepending the vm command as a comment
         var result = ["// " + vmCommand];
         var type = command.commandType( vmCommand );
         if (type === "C_PUSH" || type === "C_POP") {
@@ -85,8 +121,36 @@ function CodeWriter() {
         else if (type === "C_ARITHMETIC") {
             result = result.concat(this.writeArithmetic( vmCommand ));
         }
+        else {
+            result = result.concat(this.writeBranching( vmCommand ));
+        }
+
+
         return result;
     };
+
+    this.bootstrapCode = function() {
+        return [
+            "@256", "D=A", "@SP",
+            "M=D", "@0", "D=A",
+            "@SP", "A=M", "M=D",
+            "@SP", "M=M+1", "@LCL",
+            "D=M", "@SP", "A=M",
+            "M=D", "@SP", "M=M+1",
+            "@ARG", "D=M", "@SP",
+            "A=M", "M=D", "@SP",
+            "M=M+1", "@THIS", "D=M",
+            "@SP", "A=M", "M=D",
+            "@SP", "M=M+1", "@THAT",
+            "D=M", "@SP", "A=M",
+            "M=D", "@SP", "M=M+1",
+            "@SP", "D=M", "@5",
+            "D=D-A", "@0", "D=D-A",
+            "@ARG", "M=D", "@SP",
+            "D=M", "@LCL", "M=D",
+            "@Sys.init", "0;JMP", "(Sys.main.ret.0)"
+        ]
+    }
 }
 
 module.exports = CodeWriter;

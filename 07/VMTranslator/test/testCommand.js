@@ -25,21 +25,36 @@ describe('Command Type', function() {
         var expected = "C_POP";
         assert.equal(actual, expected);
     });
-    // it("C_LABEL", function() {
-
-    // });
-    // it("C_GOTO", function() {
-
-    // });
-    // it("C_IF", function() {
-
-    // });
-    // it("C_FUNCTION", function() {
-
-    // });
-    // it("C_RETURN", function() {
-
-    // });
+    it("C_LABEL", function() {
+        var actual = command.commandType("label LOOP_START");
+        var expected = "C_LABEL";
+        assert.equal(actual, expected);
+    });
+    it("C_GOTO", function() {
+        var actual = command.commandType("goto MAIN_LOOP_START");
+        var expected = "C_GOTO";
+        assert.equal(actual, expected);
+    });
+    it("C_IF", function() {
+        var actual = command.commandType("if-goto LOOP_START");
+        var expected = "C_IF";
+        assert.equal(actual, expected);
+    });
+    it("C_FUNCTION", function() {
+        var actual = command.commandType("function Sys.init 0");
+        var expected = "C_FUNCTION";
+        assert.equal(actual, expected);
+    });
+    it("C_RETURN", function() {
+        var actual = command.commandType("return");
+        var expected = "C_RETURN";
+        assert.equal(actual, expected);
+    });
+    it("C_CALL", function() {
+        var actual = command.commandType("call Sys.main 0");
+        var expected = "C_CALL";
+        assert.equal(actual, expected);
+    });
 
 });
 describe('args', function() {
@@ -68,11 +83,30 @@ describe('args', function() {
             assert.equal(expected, actual);
         });
     });
-    describe('arithmetic', function() {
-        it("arg1 of a add", function() {
-            var expected = "add";
-            var actual = command.arg1("add");
+    describe('branching', function() {
+        it("arg1 of a label", function() {
+            var expected = "LOOP_START";
+            var actual = command.arg1("label LOOP_START");
+            assert.equal(expected, actual);
+        });
+        it("arg1 of if-goto", function() {
+            var expected = "LOOP_START";
+            var actual = command.arg1("if-goto LOOP_START");
             assert.equal(expected, actual);
         });
     });
+
+    describe('call', function() {
+        it("arg1 of call", function() {
+            var expected = "Sys.main";
+            var actual = command.arg1("call Sys.main 0");
+            assert.equal(expected, actual);
+        });
+        it("arg2 of call", function() {
+            var expected = "0";
+            var actual = command.arg2("call Sys.main 0");
+            assert.equal(expected, actual);
+        });
+    });
+    
 });

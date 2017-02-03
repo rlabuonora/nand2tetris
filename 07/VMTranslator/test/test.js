@@ -45,14 +45,7 @@ describe('VMTranslator', function() {
             assert(fs.existsSync(file));
             fs.unlinkSync(file);
         });
-        it('with static variables', function() {
-            // choose asm filename
-            var vmFile = './test/support/StaticTestMultipleFiles/';
-            var correctFile = './test/support/StaticTestMultipleFiles/correct.asm';
-            var actual = new VMTranslator( vmFile ).translate();
-            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
-            assert.deepEqual(actual, expected);
-        });
+        
     });
 
     describe('translate and array of instructions', function() {
@@ -65,31 +58,19 @@ describe('VMTranslator', function() {
             assert.deepEqual(actual, expected);
         });
     });
-    describe('simple or', function() {
-        it('correctly ', function() {
-            var vmFile = './test/support/simpleOr/SimpleOr.vm';
-            var correctFile = './test/support/simpleOr/SimpleOrCorrect.asm';
-            var actual = new VMTranslator( vmFile ).translate();
-            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
-            assert.deepEqual(actual, expected);
+    describe('cpu instructions', function() {
+        it('Simple Add', function() {
+            var file = '../StackArithmetic/SimpleAdd/SimpleAdd.vm';
+            var actual = new VMTranslator( file ).cpuInstructions;;
+            var expected = 27;
+            assert.equal(actual, expected);
+        });
+        it('Nested Call', function() {
+            var file = '../../08/FunctionCalls/NestedCall/NestedCall.vm';
+            var actual = new VMTranslator( file ).cpuInstructions;;
+            var expected = 295;
+            assert.equal(actual, expected);
         });
     });
-    describe('simple and', function() {
-        it('correctly ', function() {
-            var vmFile = './test/support/simpleAnd/SimpleAnd.vm';
-            var correctFile = './test/support/simpleAnd/SimpleAndCorrect.asm';
-            var actual = new VMTranslator( vmFile ).translate();
-            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
-            assert.deepEqual(actual, expected);
-        });
-    });
-    describe('simple neg', function() {
-        it('correctly ', function() {
-            var vmFile = './test/support/simpleNeg/SimpleNeg.vm';
-            var correctFile = './test/support/simpleNeg/SimpleNegCorrect.asm';
-            var actual = new VMTranslator( vmFile ).translate();
-            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
-            assert.deepEqual(actual, expected);
-        });
-    });
+
 });

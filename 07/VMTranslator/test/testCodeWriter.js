@@ -356,6 +356,141 @@ describe("Writing code", function() {
             assert.deepEqual(actual, expected);
         });
     });
+    describe("branching commands", function() {
+        var codeWriter = new CodeWriter();
+        it("if-goto", function() {
+            var command = "if-goto LOOP_START";
+            var actual = codeWriter.writeAssembly(command);
+            var expected = [
+                "// if-goto LOOP_START",
+                "@SP", "M=M-1",
+                "A=M", "D=M",
+                "@LOOP_START",
+                "D;JNE"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it("label", function() {
+            var command = "label LOOP_START";
+            var actual = codeWriter.writeAssembly(command);
+            var expected = [ "// label LOOP_START", "(LOOP_START)" ];
+            assert.deepEqual(actual, expected);
+        });
+    });
+    describe("function declarations", function() {
+        var codeWriter = new CodeWriter();
+        it("function with no locals", function() {
+            var command = "function Sys.init 0";
+            var actual = codeWriter.writeAssembly( command );
+            var expected = [
+                "// function Sys.init 0",
+                "(Sys.init)"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it("function with locals", function() {
+            var command = "function Sys.add12 2";
+            var actual = codeWriter.writeAssembly( command );
+            var expected = [
+                "// function Sys.add12 2",
+                "(Sys.add12)", "@0", "D=A",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "@0",
+                "D=A", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+    });
+    describe('function call', function() {
+        it('with 1 arguments', function() {
+            var codeWriter = new CodeWriter();
+            codeWriter.currentFunction = "Sys.main";
+            var command = "call Sys.add12 1";
+            var actual = codeWriter.writeAssembly( command );
+            var expected = [
+                "// call Sys.add12 1",
+                "@Sys.main_0", "D=A",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "@LCL",
+                "D=M", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1",
+                "@ARG", "D=M", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1", "@THIS", "D=M",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "@THAT",
+                "D=M", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1",
+                "@SP", "D=M", "@5",
+                "D=D-A", "@1", // should be n-args! CHANGE!!
+                "D=D-A",
+                "@ARG", "M=D", "@SP",
+                "D=M", "@LCL", "M=D",
+                "@Sys.add12", "0;JMP", // go to function name 
+                "(Sys.main_0)"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+        it('with 0 arguments', function() {
+            var codeWriter = new CodeWriter();
+            codeWriter.currentFunction = "Sys.init";
+            var command = "call Sys.main 0";
+            var actual = codeWriter.writeAssembly( command );
+            var expected = [
+                "// call Sys.main 0",
+                "@Sys.init_0", "D=A", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1", "@LCL", "D=M",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "@ARG",
+                "D=M", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1",
+                "@THIS", "D=M", "@SP",
+                "A=M", "M=D", "@SP",
+                "M=M+1", "@THAT", "D=M",
+                "@SP", "A=M", "M=D",
+                "@SP", "M=M+1", "@SP",
+                "D=M", "@5", "D=D-A",
+                "@0", // should be n-args! CHANGE!!
+                "D=D-A", "@ARG", "M=D",
+                "@SP", "D=M", "@LCL",
+                "M=D", "@Sys.main", "0;JMP",
+                "(Sys.init_0)", 
+            ];
+            assert.deepEqual(actual, expected);
+        });
+    });
+
+    describe('return', function() {
+        it('returning', function() {
+            var codeWriter = new CodeWriter();
+            var command = "return";
+            var actual = codeWriter.writeAssembly( command );
+            var expected = [
+                "// return",
+                "@LCL", "D=M", "@endFrame",
+                "M=D", "@endFrame", "D=M",
+                "@5", "A=D-A", "D=M",
+                "@retAddr", "M=D", "@SP",
+                "M=M-1", "A=M", "D=M",
+                "@ARG", "A=M", "M=D",
+                "@ARG", "D=M+1", "@SP",
+                "M=D", "@endFrame", "D=M",
+                "@1", "A=D-A", "D=M",
+                "@THAT", "M=D", "@endFrame",
+                "D=M", "@2", "A=D-A",
+                "D=M", "@THIS", "M=D",
+                "@endFrame", "D=M",
+                "@3", "A=D-A", "D=M",
+                "@ARG", "M=D", "@endFrame",
+                "D=M", "@4", "A=D-A",
+                "D=M", "@LCL", "M=D",
+                "@retAddr", "A=M", "0;JMP"
+            ];
+            assert.deepEqual(actual, expected);
+        });
+    });
 });
 
 
@@ -371,4 +506,3 @@ describe('Labels', function() {
         assert.equal(secondLabel.label, "(Hello_1)");
     });
 });
-
