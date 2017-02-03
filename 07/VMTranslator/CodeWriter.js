@@ -6,7 +6,7 @@ var branchingCommand = require('./branchingCommand');
 function CodeWriter() {
     this.fileName = "";
     this.labelCount = {};
-    
+
 
     this.getLabel = function( str ) {
 
@@ -62,7 +62,7 @@ function CodeWriter() {
         else if (type === "C_POP") {
             var segment = command.arg1( vmCommand);
             var offset = command.arg2( vmCommand );
-            
+
             if (segment === "pointer") {
                 if (offset === "0") return memoryAccessCommand.popPointerThis();
                 else if (offset === "1") return memoryAccessCommand.popPointerThat();
@@ -77,7 +77,7 @@ function CodeWriter() {
     };
     this.writeBranching = function( vmCommand ) {
 
-        
+
         var type = command.commandType( vmCommand );
         if (type === "C_GOTO") {
             var label = command.arg1( vmCommand );
@@ -107,12 +107,12 @@ function CodeWriter() {
             return branchingCommand.cll(callee, nArgs, callerLabel );
         }
 
-        
+
     }
     this.writeAssembly = function( vmCommand ) {
         // translates a single command from
         // vm code to an array of assembler commands
-        // prepending the vm command as a comment 
+        // prepending the vm command as a comment
         var result = ["// " + vmCommand];
         var type = command.commandType( vmCommand );
         if (type === "C_PUSH" || type === "C_POP") {
@@ -124,10 +124,33 @@ function CodeWriter() {
         else {
             result = result.concat(this.writeBranching( vmCommand ));
         }
-        
-     
+
+
         return result;
     };
+
+    this.bootstrapCode = function() {
+        return [
+            "@256", "D=A", "@SP",
+            "M=D", "@0", "D=A",
+            "@SP", "A=M", "M=D",
+            "@SP", "M=M+1", "@LCL",
+            "D=M", "@SP", "A=M",
+            "M=D", "@SP", "M=M+1",
+            "@ARG", "D=M", "@SP",
+            "A=M", "M=D", "@SP",
+            "M=M+1", "@THIS", "D=M",
+            "@SP", "A=M", "M=D",
+            "@SP", "M=M+1", "@THAT",
+            "D=M", "@SP", "A=M",
+            "M=D", "@SP", "M=M+1",
+            "@SP", "D=M", "@5",
+            "D=D-A", "@0", "D=D-A",
+            "@ARG", "M=D", "@SP",
+            "D=M", "@LCL", "M=D",
+            "@Sys.init", "0;JMP", "(Sys.main.ret.0)"
+        ]
+    }
 }
 
 module.exports = CodeWriter;

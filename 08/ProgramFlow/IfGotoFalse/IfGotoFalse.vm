@@ -1,0 +1,11 @@
+push constant 8
+push constant 7
+lt
+if-goto PUSH_1
+push constant 2
+goto END
+label PUSH_1
+push constant 1
+// infinite loop
+label END
+goto END

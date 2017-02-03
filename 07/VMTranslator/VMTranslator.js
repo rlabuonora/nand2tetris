@@ -9,7 +9,6 @@ function VMTranslator( sourcePath ) {
     this.objectFileName;
     this.destinationPath;
 
-
     this.saveFile = function( assemblerCode ) {
         var dest = this.destinationPath + "/" + this.objectFileName;
         fs.writeFile(dest, assemblerCode , function (err) {
@@ -35,6 +34,7 @@ function VMTranslator( sourcePath ) {
         var sourcePath = removeTrailingSlash( sourcePath );
         var stats = fs.statSync( sourcePath );
         if (stats.isDirectory()) {
+            this.isDir = true;
             this.files = fs.readdirSync( sourcePath )
                 .filter(function(file) { return path.extname(file) === ".vm"; })
                 .map(function(file) { return sourcePath + "/" + file; });
@@ -58,20 +58,30 @@ function VMTranslator( sourcePath ) {
         };
 
         var codeWriter = new CodeWriter();
-        return this.files.reduce(function(a, b) {
+        var translation = this.files.reduce(function(a, b) {
             var parser = new Parser( b );
             codeWriter.fileName = path.basename(b, ".vm");
             var commands = parser.commands;
             return a.concat(translateInstructions(commands, codeWriter));
         }, []);
 
+        if (this.isDir) {
+            return codeWriter.bootstrapCode().concat(translation);
+        } else {
+            return translation;
+        }
     }
 
 
     this.initializeFromPath( sourcePath )
     // save to file
-    var translation = this.translate().join("\n");
-    this.saveFile(translation);
+    var translation = this.translate()
+    this.cpuInstructions = translation.filter(function(line) {
+        return (line[0] !== "(" && line[0] !== "/");
+    }).length - 1;
+    
+    
+    this.saveFile(translation.join("\n"));
 }
 
 

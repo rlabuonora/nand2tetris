@@ -1,73 +1,59 @@
-// function Sys.init 0
-(Sys.init)
-// push constant 4
-@4
+@256
+D=A // set stack pointer
+@SP
+M=D
+@0 // Call Sys.init
 D=A
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// call Main.fibonacci 1
-@Sys.init_0
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@LCL
+@LCL // save LCL
 D=M
 @SP
 A=M
 M=D
 @SP
 M=M+1
-@ARG
+@ARG // save ARG
 D=M
 @SP
 A=M
 M=D
 @SP
 M=M+1
-@THIS
+@THIS // save THIS
 D=M
 @SP
 A=M
 M=D
 @SP
 M=M+1
-@THAT
+@THAT // save THAT
 D=M
 @SP
 A=M
 M=D
 @SP
 M=M+1
-@SP
+@SP // reposition ARG
 D=M
 @5
 D=D-A
-@1
+@0 // should be n-args! CHANGE!!
 D=D-A
 @ARG
 M=D
-@SP
+@SP // LCL = SP
 D=M
 @LCL
 M=D
-@Main.fibonacci
-0;JMP
-(Sys.init_0)
-// label WHILE
-(WHILE)
-// goto WHILE
-@WHILE
-0;JMP
-// function Main.fibonacci 0
-(Main.fibonacci)
-// push argument 0
-@0
+@Sys.init
+0;JMP // go to function name
+(Sys.main.ret.0) // ROM 53
+(Main.fibonacci)// function Main.fibonacci 0
+@0 // push argument 0
 D=A
 @ARG
 A=D+M
@@ -77,16 +63,14 @@ A=M
 M=D
 @SP
 M=M+1
-// push constant 2
-@2
+@2 // push constant 2
 D=A
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// lt
-@SP
+@SP // lt ROM 70
 M=M-1
 @SP
 A=M
@@ -106,26 +90,22 @@ M=M+1
 @END_0
 0;JMP
 (TRUE_0)
-@SP
+@SP  
 A=M
 M=-1
 @SP
 M=M+1
 (END_0)
-// if-goto IF_TRUE
-@SP
-M=M-1
+@SP 
+M=M-1 // ROM 94
 A=M
 D=M
 @IF_TRUE
 D;JGT
-// goto IF_FALSE
-@IF_FALSE
-0;JMP
-// label IF_TRUE
-(IF_TRUE)
-// push argument 0
-@0
+@IF_FALSE 
+0;JMP // ROM 101
+(IF_TRUE) 
+@0 
 D=A
 @ARG
 A=D+M
@@ -134,9 +114,8 @@ D=M
 A=M
 M=D
 @SP
-M=M+1
-// return
-@LCL
+M=M+1 // ROM 174 repeat 163
+@LCL // return
 D=M
 @endFrame
 M=D
@@ -189,10 +168,8 @@ M=D
 @retAddr
 A=M
 0;JMP
-// label IF_FALSE
-(IF_FALSE)
-// push argument 0
-@0
+(IF_FALSE) 
+@0 // push argument 0
 D=A
 @ARG
 A=D+M
@@ -202,16 +179,14 @@ A=M
 M=D
 @SP
 M=M+1
-// push constant 2
-@2
+@2 // push constant 2
 D=A
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// sub
-@SP
+@SP // sub
 M=M-1
 @SP
 A=M
@@ -225,8 +200,7 @@ A=M
 M=D
 @SP
 M=M+1
-// call Main.fibonacci 1
-@Main.fibonacci_0
+@Main.fibonacci_0 // call Main.fibonacci 1
 D=A
 @SP
 A=M
@@ -276,8 +250,7 @@ M=D
 @Main.fibonacci
 0;JMP
 (Main.fibonacci_0)
-// push argument 0
-@0
+@0 // push argument 0
 D=A
 @ARG
 A=D+M
@@ -287,16 +260,14 @@ A=M
 M=D
 @SP
 M=M+1
-// push constant 1
-@1
+@1 // push constant 1
 D=A
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// sub
-@SP
+@SP // sub
 M=M-1
 @SP
 A=M
@@ -310,8 +281,7 @@ A=M
 M=D
 @SP
 M=M+1
-// call Main.fibonacci 1
-@Main.fibonacci_1
+@Main.fibonacci_1 // call Main.fibonacci 1
 D=A
 @SP
 A=M
@@ -361,8 +331,7 @@ M=D
 @Main.fibonacci
 0;JMP
 (Main.fibonacci_1)
-// add
-@SP
+@SP // add
 M=M-1
 @SP
 A=M
@@ -376,8 +345,7 @@ A=M
 M=D
 @SP
 M=M+1
-// return
-@LCL
+@LCL // return
 D=M
 @endFrame
 M=D
@@ -429,4 +397,67 @@ D=M
 M=D
 @retAddr
 A=M
+0;JMP
+(Sys.init) // function Sys.init 0
+@4 // push constant 4
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@Sys.init_0 // call Main.fibonacci 1
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@SP
+D=M
+@5
+D=D-A
+@1
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Main.fibonacci
+0;JMP
+(Sys.init_0)
+
+
+(WHILE) // label WHILE
+@WHILE // goto WHILE
 0;JMP

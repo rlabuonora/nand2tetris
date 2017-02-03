@@ -10,8 +10,8 @@ var branchingCommand = {
         return [
             "@SP", "M=M-1",
             "A=M", "D=M",
-            "@" + label,
-            "D;JGT"
+            "@" + label,            
+            "D;JNE"
         ];
     },
     label: function( label ) {

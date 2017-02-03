@@ -45,14 +45,7 @@ describe('VMTranslator', function() {
             assert(fs.existsSync(file));
             fs.unlinkSync(file);
         });
-        it('with static variables', function() {
-            // choose asm filename
-            var vmFile = './test/support/StaticTestMultipleFiles/';
-            var correctFile = './test/support/StaticTestMultipleFiles/correct.asm';
-            var actual = new VMTranslator( vmFile ).translate();
-            var expected = fs.readFileSync(correctFile).toString().split("\n").slice(0, -1); // remove last blank line
-            assert.deepEqual(actual, expected);
-        });
+        
     });
 
     describe('translate and array of instructions', function() {
@@ -63,6 +56,20 @@ describe('VMTranslator', function() {
             var expected = [ "// push constant 0", "@0", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1" ];
 
             assert.deepEqual(actual, expected);
+        });
+    });
+    describe('cpu instructions', function() {
+        it('Simple Add', function() {
+            var file = '../StackArithmetic/SimpleAdd/SimpleAdd.vm';
+            var actual = new VMTranslator( file ).cpuInstructions;;
+            var expected = 27;
+            assert.equal(actual, expected);
+        });
+        it('Nested Call', function() {
+            var file = '../../08/FunctionCalls/NestedCall/NestedCall.vm';
+            var actual = new VMTranslator( file ).cpuInstructions;;
+            var expected = 295;
+            assert.equal(actual, expected);
         });
     });
 

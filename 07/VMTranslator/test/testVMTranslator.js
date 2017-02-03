@@ -108,6 +108,29 @@ describe('Acceptance tests', function() {
             assert.equal(actual, expected);
             fs.unlink(helper.destinationFile( location, testName));
         });
+
+        it('If Goto', function() {
+            var location = "../../08/ProgramFlow";
+            var testName = "IfGoto";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
+        it('If Goto False', function() {
+            var location = "../../08/ProgramFlow";
+            var testName = "IfGotoFalse";
+            var translateCommand = helper.translateCommand( location, testName);
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
     });
     describe("Function Calls", function() {
         it("Nested Call", function() {

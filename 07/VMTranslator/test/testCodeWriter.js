@@ -366,7 +366,7 @@ describe("Writing code", function() {
                 "@SP", "M=M-1",
                 "A=M", "D=M",
                 "@LOOP_START",
-                "D;JGT"
+                "D;JNE"
             ];
             assert.deepEqual(actual, expected);
         });
