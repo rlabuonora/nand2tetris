@@ -108,7 +108,7 @@ D=D+M
 A=M
 M=D
 @SP
-M=M+1        
+M=M+1
 // pop argument 0
 @0
 D=A
@@ -141,7 +141,7 @@ M=M-1
 A=M
 D=M
 @LOOP_START
-D;JGT
+D;JNE
 // push local 0
 @0
 D=A

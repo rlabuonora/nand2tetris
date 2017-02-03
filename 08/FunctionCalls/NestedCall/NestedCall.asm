@@ -67,7 +67,7 @@ M=D
 // label LOOP
 (LOOP)
 // goto LOOP
-@MAIN_LOOP_START
+@LOOP
 0;JMP
 // function Sys.main 0
 (Sys.main)

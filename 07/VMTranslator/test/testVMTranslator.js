@@ -155,5 +155,16 @@ describe('Acceptance tests', function() {
             assert.equal(actual, expected);
             fs.unlink(helper.destinationFile( location, testName));
         });
+        it("Statics Test", function() {
+            var location = "../../08/FunctionCalls";
+            var testName = "StaticsTest";
+            var translateCommand = "node VMTranslator.js ../../08/FunctionCalls/StaticsTest";
+            execSync( translateCommand );
+            var compareCommand = helper.compareCommand( location, testName );
+            var actual = execSync( compareCommand  ).toString();
+            var expected = "End of script - Comparison ended successfully\n";
+            assert.equal(actual, expected);
+            fs.unlink(helper.destinationFile( location, testName));
+        });
     });
 });
