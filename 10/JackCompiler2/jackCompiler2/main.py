@@ -23,6 +23,7 @@ def write_tree(tree, dest):
 if __name__ == "__main__":
     program = read_program(source)
     tree = JackCompiler(program).compileClass()
+    tokens = JackTokenizer(program).tokenize()
     dest = obj_filename(source)
     write_tree(tree, dest)
 
