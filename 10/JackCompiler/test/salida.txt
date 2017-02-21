@@ -1,0 +1,53 @@
+expected <ifStatement>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  <expression>
+  <term>
+    <identifier> key </identifier>
+  </term>
+</expression>
+
+  </expression>
+  <symbol> ) </symbol>
+  <symbol> { </symbol>
+  <statements>
+  <letStatement>
+  <keyword> let </keyword>
+  <identifier> exit </identifier>
+  <symbol> = </symbol>
+  <expression>
+    <term>
+      <identifier> exit </identifier>
+    </term>
+  </expression>
+  <symbol> ; </symbol>
+</letStatement>
+
+</statements>
+  <symbol> } </symbol>
+</ifStatement>
+ to equal <ifStatement>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  <expression>
+    <term>
+      <identifier> key </identifier>
+    </term>
+  </expression>
+  <symbol> ) </symbol>
+  <symbol> { </symbol>
+  <statements>
+    <letStatement>
+      <keyword> let </keyword>
+      <identifier> exit </identifier>
+      <symbol> = </symbol>
+      <expression>
+        <term>
+          <identifier> exit </identifier>
+        </term>
+      </expression>
+      <symbol> ; </symbol>
+    </letStatement>
+  </statements>
+  <symbol> } </symbol>
+</ifStatement> ignoring spaces
