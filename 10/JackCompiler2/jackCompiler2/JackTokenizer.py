@@ -6,14 +6,17 @@ class JackTokenizer:
     def __init__(self, program):
         self._program = program
         no_comments = self.remove_comments(program)
-        self._tokens = "<tokens>\n" + self.tokenize(no_comments) + "\n</tokens>"
+        self._tokens = self.tokenize(no_comments)
 
-    def get_tokens(self):
-        return self._tokens
+    def to_xml(self):
+        tags = "\n".join([token.make_tag() for token in self._tokens])
+        xml= "<tokens>\n" + tags +  "\n</tokens>"
+        return xml
+        
     
     def tokenize(self, program):
         words = self.split(program)
-        return "\n".join([JackToken(word).make_tag() for word in words])
+        return [JackToken(word) for word in words]
         
 
     def split(self, program):
@@ -100,6 +103,6 @@ if __name__ == "__main__":
     import sys
     source = sys.argv[1]
     program = read_program(source)
-    tokens = JackTokenizer(program).get_tokens()
+    xml = JackTokenizer(program).to_xml()
     dest = obj_filename(source)
-    write_tokens(tokens, dest)
+    write_tokens(xml, dest)
