@@ -6,3 +6,7 @@ class JackTokenizer:
 
     def tokenize(self):
         return "tokens"
+
+
+    def remove_comments(self, program):
+        pass
