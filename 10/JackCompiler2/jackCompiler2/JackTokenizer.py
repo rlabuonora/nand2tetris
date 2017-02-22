@@ -3,10 +3,6 @@ from collections import OrderedDict
 
 class JackTokenizer:
 
-
-        
-
-
     def __init__(self, program):
         self._program = program
         no_comments = self.remove_comments(program)
@@ -14,19 +10,10 @@ class JackTokenizer:
 
     def get_tokens(self):
         return self._tokens
-
-    def match_token(self, token, regexp):
-        regexp = re.compile(regexp)
-        return not(regexp.match(token) is None)
-    
-    def token_type(self, token):
-        for key, reg_exp in JackToken.TOKENS.items():
-            if self.match_token(token, reg_exp):
-                return key
     
     def tokenize(self, program):
         words = self.split(program)
-        return "\n".join([JackToken(self.token_type(word), word).make_tag() for word in words])
+        return "\n".join([JackToken(word).make_tag() for word in words])
         
 
     def split(self, program):
@@ -54,9 +41,18 @@ class JackToken:
     TOKENS["integerConstant"] = r"\b\d{1,5}\b"
     TOKENS["identifier"] =  r"[a-zA-Z_][a-zA-Z0-9_]*"
 
-    def __init__(self, type, value):
-        self.type = type
-        self.value = self.sanitize(type, value)
+    def __init__(self, token):
+        self.type = self.token_type(token)
+        self.value = self.sanitize(self.type, token)
+
+    def match_token(self, token, regexp):
+        regexp = re.compile(regexp)
+        return not(regexp.match(token) is None)
+    
+    def token_type(self, token):
+        for key, reg_exp in JackToken.TOKENS.items():
+            if self.match_token(token, reg_exp):
+                return key        
         
     def sanitize(self, type, value):
         if type == "stringConstant":
