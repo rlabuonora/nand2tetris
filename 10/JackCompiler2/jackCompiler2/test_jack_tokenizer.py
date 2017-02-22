@@ -43,10 +43,7 @@ class TestTokenizer(unittest.TestCase):
         out = self.compare_files(file_1, file_2)
         self.assertEqual(out, "Comparison ended successfully\n")
 
-def read_program(source):
-    with open(source, 'r') as myfile:
-        data=myfile.read()
-    return  data       
+
         
 if __name__ == '__main__':
     unittest.main()
