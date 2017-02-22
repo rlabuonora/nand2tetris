@@ -43,12 +43,6 @@ class TestTokenizer(unittest.TestCase):
         out = self.compare_files(file_1, file_2)
         self.assertEqual(out, "Comparison ended successfully\n")
 
-    def test_tokenizer(self):
-        prog = read_program('../../ExpressionlessSquare/Main.jack')
-        tokens = JackTokenizer.JackTokenizer(prog).get_tokens()
-        print tokens
-
-
 def read_program(source):
     with open(source, 'r') as myfile:
         data=myfile.read()
