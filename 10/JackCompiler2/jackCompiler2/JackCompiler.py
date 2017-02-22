@@ -1,15 +1,13 @@
-import JackTokenizer
+from JackTokenizer import JackTokenizer
 
 
 class JackCompiler:
 
     def __init__(self, program):
-        tokenizer = JackTokenizer.JackTokenizer(program)
-        self._tokens = tokenizer.get_tokens().split("\n")[1:-1]
-        print self._tokens
-
+        tokens = JackTokenizer(program).get_tokens()
+        print tokens
+        
     def compileExpression(self):
-        print self._tokens
         return "algo"
     
     def compileClass(self):
@@ -19,10 +17,7 @@ class JackCompiler:
 
 
 
-class JackToken:
 
-    def __init__(self, tag):
-        
         
 
 

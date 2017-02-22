@@ -1,5 +1,4 @@
-import JackCompiler
-import JackTokenizer
+from JackCompiler import JackCompiler
 import unittest
 
 def read_program(source):
@@ -7,9 +6,7 @@ def read_program(source):
         data=myfile.read()
     return  data
 
-
-def get_token_list(prog):
-    return JackTokenizer.JackTokenizer(prog).get_tokens().split("\n")[1:-1]
+    
     
 class TestCompileExpression(unittest.TestCase):
 
@@ -17,18 +14,17 @@ class TestCompileExpression(unittest.TestCase):
     def test_array(self):
         file ='../../ArrayTest/Main.jack'
         prog = read_program(file)
-        tokens = get_token_list(prog)
+        actual = JackCompiler(prog).compileExpression()
         
 
     def test_var_name(self):
         prog = 'x'
-        tokens = get_token_list(prog)
+        actual = JackCompiler(prog).compileExpression()
         
 
     def test_unary_op2(self):
         prog = '~x'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <symbol> ~ </symbol>
@@ -42,8 +38,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_binary_op(self):
         prog = 'x + 1'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <identifier> x </identifier>
@@ -58,8 +53,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_integer_constant(self):
         prog = '1'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <integerConstant> 1 </integerConstant>
@@ -70,8 +64,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_string_constant(self):
         prog = '"algo"'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <stringConstant> algo  </stringConstant>
@@ -82,8 +75,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_expression_list(self):
         prog = 'x, (y + size) - 1, x + size, y + size'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expressionList>
   <expression>
     <term>
@@ -137,8 +129,7 @@ class TestCompileExpression(unittest.TestCase):
                 
     def test_string_constant(self):
         prog = '(x + size) < 510'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """
 <expression>
   <term>
@@ -165,8 +156,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_subroutine_call(self):
         prog = 'SquareGame.new()'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <identifier> SquareGame </identifier>
@@ -183,8 +173,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_subroutine_call_2(self):
         prog = 'foo()'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <identifier> new </identifier>
@@ -199,8 +188,7 @@ class TestCompileExpression(unittest.TestCase):
         
     def test_array_access(self):
         prog = 'a[i]'
-        tokens = get_token_list(prog)
-        actual = JackCompiler.JackCompiler(prog).compileExpression()
+        actual = JackCompiler(prog).compileExpression()
         expected = """<expression>
   <term>
     <identifier> a </identifier>
@@ -216,9 +204,6 @@ class TestCompileExpression(unittest.TestCase):
 """
         self.assertEqual(actual, expected)                                
         
-        
-
-
 
         
 

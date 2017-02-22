@@ -4,18 +4,19 @@ from collections import OrderedDict
 class JackTokenizer:
 
     def __init__(self, program):
-        self._program = program
-        no_comments = self.remove_comments(program)
-        self._tokens = self.tokenize(no_comments)
+        self._program = self.remove_comments(program) 
+        self._tokens = self.tokenize()
 
     def to_xml(self):
         tags = "\n".join([token.make_tag() for token in self._tokens])
         xml= "<tokens>\n" + tags +  "\n</tokens>"
         return xml
         
+    def get_tokens(self):
+        return self._tokens
     
-    def tokenize(self, program):
-        words = self.split(program)
+    def tokenize(self):
+        words = self.split(self._program)
         return [JackToken(word) for word in words]
         
 
@@ -48,6 +49,9 @@ class JackToken:
         self.type = self.token_type(token)
         self.value = self.sanitize(self.type, token)
 
+
+    def __repr__(self):
+        return "type: {0}, value: '{1}'\n".format(self.type, self.value)
     def match_token(self, token, regexp):
         regexp = re.compile(regexp)
         return not(regexp.match(token) is None)
