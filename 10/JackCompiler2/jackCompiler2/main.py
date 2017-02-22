@@ -2,7 +2,7 @@ import sys
 from JackCompiler import JackCompiler
 
 
-source = sys.argv[1]
+
 
     
 def read_program(source):
@@ -21,6 +21,7 @@ def write_tree(tree, dest):
         file.write(tree)
 
 if __name__ == "__main__":
+    source = sys.argv[1]
     program = read_program(source)
     tree = JackCompiler(program).compileClass()
     # tokens = JackTokenizer(program).tokenize()
