@@ -39,9 +39,9 @@ class TestCompileExpression(unittest.TestCase):
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
         
         
-    @unittest.skip("not implemented")
+    
     def test_binary_op(self):
-        prog = 'x + 1'
+        prog = 'x + size'
         actual = JackCompiler(prog).compile_expression()
         expected = """<expression>
   <term>
@@ -53,7 +53,8 @@ class TestCompileExpression(unittest.TestCase):
   </term>
 </expression>
 """
-        self.assertEqual(actual, expected)
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+        
 
     def test_integer_constant(self):
         prog = '1'
@@ -157,8 +158,8 @@ class TestCompileExpression(unittest.TestCase):
         
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
         
-    @unittest.skip("not implemented")                
-    def test_inequality(self):
+    
+    def test_inequality_2(self):
         prog = '(x + size) < 510'
         actual = JackCompiler(prog).compile_expression()
         expected = """
@@ -182,7 +183,6 @@ class TestCompileExpression(unittest.TestCase):
   </term>
 </expression>
 """
-        
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
     @unittest.skip("skip")
