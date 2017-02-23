@@ -76,6 +76,11 @@ class JackCompiler:
         s = self.eat(type="stringConstant")
         return base.format(s)
 
+    def compile_keyword_constant(self):
+        base = templates["keyword_constant"]
+        s = self.eat(type="keyword")
+        return base.format(s)
+    
     def compile_var_name(self):
         base = templates["var_name"]
         var_name = self.eat(type='identifier')
@@ -126,12 +131,13 @@ class JackCompiler:
 
     def compile_term(self):
         next_token = self._tokens[0]
+        
         if next_token.type == 'integerConstant':
             return self.compile_integer_constant()
         elif next_token.type == 'stringConstant':
             return self.compile_string_constant()
-        elif next_token == 'keyword':
-            return 'compile keyword constant'
+        elif next_token.type == 'keyword':
+            return self.compile_keyword_constant()
         elif next_token.type == 'symbol':
             if next_token.value == '(':
                 return self.compile_paren()
@@ -148,7 +154,7 @@ class JackCompiler:
                     return self.compile_fun_call()
                 elif token.value == '[':
                     return self.compile_array_access()
-        return "algo"
+
     
     def compileClass(self):
         return "output.txt\n"
@@ -186,6 +192,11 @@ templates = {
 <term>
   <stringConstant> {0}  </stringConstant>
 </term>""",
+    "keyword_constant":    
+"""
+<term>
+  <keywordConstant> {0}  </keywordConstant>
+</term>""",    
     "var_name":
 """
 <term>

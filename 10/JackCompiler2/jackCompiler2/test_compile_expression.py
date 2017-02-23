@@ -67,6 +67,18 @@ class TestCompileExpression(unittest.TestCase):
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
+
+    def test_keyword_constant(self):
+        prog = 'this'
+        actual = JackCompiler(prog).compile_expression()
+        expected = """<expression>
+  <term>
+    <keywordConstant> this </keywordConstant>
+  </term>
+</expression>
+"""
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+        
     def test_string_constant(self):
         prog = '"algo"'
         actual = JackCompiler(prog).compile_expression()
