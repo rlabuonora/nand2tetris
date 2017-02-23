@@ -16,7 +16,7 @@ class Main {
 
         let game = game;
         do game.run();
-		do game.dispose();
+	do game.dispose();
 
         return;
     }
