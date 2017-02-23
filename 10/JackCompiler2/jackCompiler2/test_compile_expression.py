@@ -58,7 +58,6 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_integer_constant(self):
         prog = '1'
-        print prog        
         actual = JackCompiler(prog).compile_expression()
         expected = """<expression>
   <term>
@@ -185,7 +184,7 @@ class TestCompileExpression(unittest.TestCase):
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
-    @unittest.skip("skip")
+
     def test_class_subroutine_call(self):
         prog = 'SquareGame.new()'
         actual = JackCompiler(prog).compile_expression()
@@ -204,7 +203,7 @@ class TestCompileExpression(unittest.TestCase):
         
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
         
-    @unittest.skip("skip")
+    
     def test_simple_subroutine_call(self):
         prog = 'foo()'
         actual = JackCompiler(prog).compile_expression()
@@ -218,7 +217,7 @@ class TestCompileExpression(unittest.TestCase):
   </term>
 </expression>
 """
-        
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
         
     def test_array_access(self):
         prog = 'a[i]'

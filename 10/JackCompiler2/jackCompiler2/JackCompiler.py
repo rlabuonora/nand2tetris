@@ -73,14 +73,28 @@ class JackCompiler:
         sym = self.eat(type="symbol")
         term = self.compile_term()
         return base.format(sym, term)
-
+    
+    def compile_class_call(self):
+        cls_base = templates["subroutine_call"]["class"]
+        cls_name = self.eat(type='identifier')
+        cls_tree = cls_base.format(cls_name)
+        self.eat(value='.')
+        # TODO: refactor with compile_fun_call
+        fun_base = templates["subroutine_call"]["fun"]
+        base = templates["subroutine_call"]["fun"]
+        fun_name = self.eat(type='identifier')
+        self.eat(value='(')
+        fun_tree = base.format(fun_name)
+        fun_base = templates["subroutine_call"]["base"]
+        return fun_base.format(cls_tree, fun_tree)
+    
     def compile_fun_call(self):
         base = templates["subroutine_call"]["fun"]
         fun_name = self.eat(type='identifier')
         self.eat(value='(')
-        fun_tree = base.format("", fun_name)
+        fun_tree = base.format(fun_name)
         fun_base = templates["subroutine_call"]["base"]
-        return fun_base.format(fun_tree, "")
+        return fun_base.format("", fun_tree)
 
     def compile_array_access(self):
         base = templates["array_access"]
@@ -96,16 +110,6 @@ class JackCompiler:
         expression = self.compile_expression()
         self.eat(value=')')
         return base.format(expression)
-    
-    # def compile_class_call(self):
-    #     class_template = templates["subroutine_call"]["class"]
-    #     class_name = self.eat(type='identifier')
-    #     cls_tree = base.format(class_name)
-    #     self.eat(value='.')
-    #     fun_name = self.eat(type='identifier')
-    #     self.eat(value='(')
-    #     fun_base = templates["subroutine_call"]["base"]
-    #     return fun_base.format(class_name)
 
     def compile_term(self):
         next_token = self._tokens[0]
