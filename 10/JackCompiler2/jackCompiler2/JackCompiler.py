@@ -1,4 +1,5 @@
 from JackTokenizer import JackTokenizer
+import re
 
 class UnexpectedToken(Exception):
     pass
@@ -16,7 +17,7 @@ class JackCompiler:
         tokenVal = self._tokens[1].value
         return  ( tokenVal == '.' or tokenVal == '(')
     
-    def end_of_exp(self):
+    def end_of_term(self):
         if len(self._tokens) == 1:
             return True
         elif (self.array_access() or
@@ -38,8 +39,19 @@ class JackCompiler:
     def compile_expression(self):
         base = templates["expression"]
         term1 =  self.compile_term()
-        return base.format(term1)
+        if self.has_op():
+            sym_char = self.eat('symbol')
+            sym_tag = templates["symbol"].format(sym_char)
+            term2 = self.compile_term()
+            return base.format(term1, sym_tag, term2)
+        return base.format(term1, "", "") # TODO: refactor to use default
         
+    def has_op(self):
+        if len(self._tokens) < 1:
+            return False
+        next_token = self._tokens[0].value
+        regexp = re.compile('[/+-/\/*&///|<>=]')
+        return not (re.match(regexp, next_token) is None)
 
     def compile_integer_constant(self):
         base = templates["integer_constant"]
@@ -77,6 +89,13 @@ class JackCompiler:
         array_index = self.compile_expression()
         self.eat(value=']')
         return base.format(array_name, array_index)
+
+    def compile_paren(self):
+        base = templates["parens"]
+        self.eat(value='(')
+        expression = self.compile_expression()
+        self.eat(value=')')
+        return base.format(expression)
     
     # def compile_class_call(self):
     #     class_template = templates["subroutine_call"]["class"]
@@ -88,10 +107,6 @@ class JackCompiler:
     #     fun_base = templates["subroutine_call"]["base"]
     #     return fun_base.format(class_name)
 
-    
-        
-        
-        
     def compile_term(self):
         next_token = self._tokens[0]
         if next_token.type == 'integerConstant':
@@ -99,14 +114,14 @@ class JackCompiler:
         elif next_token.type == 'stringConstant':
             return self.compile_string_constant()
         elif next_token == 'keyword':
-            return 'compile string constant'
+            return 'compile keyword constant'
         elif next_token.type == 'symbol':
             if next_token.value == '(':
-                return 'compile paren'
+                return self.compile_paren()
             elif next_token.value == '~' or next_token.value == '-':
                 return self.compile_unary_op()
         elif next_token.type == 'identifier':
-            if self.end_of_exp():
+            if self.end_of_term():
                 return self.compile_var_name()
             else:
                 token = self._tokens[1]
@@ -128,10 +143,14 @@ class JackCompiler:
 
         
 templates = {
+    "symbol":
+    "<symbol> {0} </symbol>",
     "expression":
 """
 <expression>
   {0}
+  {1}
+  {2}
 </expression>
 """,
     "integer_constant":
@@ -165,6 +184,14 @@ templates = {
     <symbol> {0} </symbol>
     {1}
 </term>
+""",
+    "parens":
+"""
+  <term>
+    <symbol> ( </symbol>
+    {0}
+    <symbol> ) </symbol>
+  </term>
 """,
     "subroutine_call":
   { "fun":

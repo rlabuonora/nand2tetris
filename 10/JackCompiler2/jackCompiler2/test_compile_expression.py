@@ -133,6 +133,30 @@ class TestCompileExpression(unittest.TestCase):
 
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
+
+    def test_parens(self):
+        prog = '(x + size)'
+        actual = JackCompiler(prog).compile_expression()
+        expected = """
+<expression>
+  <term>
+    <symbol> ( </symbol>
+      <expression>
+        <term>
+          <identifier> x </identifier>
+        </term>
+        <symbol> + </symbol>
+        <term>
+          <identifier> size </identifier>
+        </term>
+      </expression>
+    <symbol> ) </symbol>
+  </term>
+</expression>
+"""
+        
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+        
     @unittest.skip("not implemented")                
     def test_inequality(self):
         prog = '(x + size) < 510'

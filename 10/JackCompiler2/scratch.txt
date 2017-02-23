@@ -1,0 +1,2 @@
+'<expression><term><symbol>(</symbol><expression><term><identifier>x</identifier></term>+<term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression>'
+'<expression><term><symbol>(</symbol><expression><term><identifier>x</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression>'
