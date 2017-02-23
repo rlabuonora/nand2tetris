@@ -29,13 +29,26 @@ class JackCompiler:
     def eat(self, type=None, value=None):
         token = self._tokens.pop(0)
         if type is not None and type != token.type:
-            
             raise UnexpectedToken("Unexpected token type: expected {0}, got {1}".format(type, token.type))
         if value is not None and value != token.value:
             raise UnexpectedToken("Unexpected token val: expected {0}, got {1}".format(value, token.value))
 
         return token.value
+
+
+    def end_of_list(self):
+        return (len(self._tokens) == 0 or self._tokens[0].value != ',')
     
+    def compile_expression_list(self):
+        exps = [self.compile_expression()]
+        while (not self.end_of_list()):
+            self.eat(value=',')
+            exp = self.compile_expression()
+            exps.append(exp)
+        base = templates["expression_list"]
+        expressions = "<symbol> , </symbol>".join(exps)
+        return base.format(expressions)
+            
     def compile_expression(self):
         base = templates["expression"]
         term1 =  self.compile_term()
@@ -50,7 +63,7 @@ class JackCompiler:
         if len(self._tokens) < 1:
             return False
         next_token = self._tokens[0].value
-        regexp = re.compile('[/+-/\/*&///|<>=]')
+        regexp = re.compile(r'[/+\-/\/*&///|<>=]')
         return not (re.match(regexp, next_token) is None)
 
     def compile_integer_constant(self):
@@ -149,6 +162,12 @@ class JackCompiler:
 templates = {
     "symbol":
     "<symbol> {0} </symbol>",
+    "expression_list":
+"""
+<expressionList>
+  {0}
+</expressionList>
+""",
     "expression":
 """
 <expression>

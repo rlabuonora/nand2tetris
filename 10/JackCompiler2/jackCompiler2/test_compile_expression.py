@@ -78,10 +78,10 @@ class TestCompileExpression(unittest.TestCase):
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
-    @unittest.skip("not implemented")
+
     def test_expression_list(self):
         prog = 'x, (y + size) - 1, x + size, y + size'
-        actual = JackCompiler(prog).compile_expression()
+        actual = JackCompiler(prog).compile_expression_list()
         expected = """<expressionList>
   <expression>
     <term>

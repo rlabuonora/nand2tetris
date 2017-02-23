@@ -1,13 +1,3 @@
-'<expression><term><symbol>(</symbol><expression><term><identifier>x</identifier></term>+<term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression>'
-'<expression><term><symbol>(</symbol><expression><term><identifier>x</ident
-ifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression>'
+'<expression><term><identifier>x</identifier></term><symbol>,</symbol><term><symbol>(</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression>'
 
-
-
-'\n<expression>\n  \n<term>\n  <identifier> x </identifier>\n</term>\n\n  <symbol> + </symbol>\n  \n<term>\n  <integerConstant> 1 </integerConstant>\n</term>\n</expression>\n'
-
-'<expression>\n  <term>\n    <identifier> x </identifier>\n  </term>\n  <symbol> + </symbol>\n  <term>\n    <identifier> size </identifier>\n  </term>\n</expression>\n'
-
-
-'<expression><term><identifier>x</identifier></term><symbol>+</symbol><term><integerConstant>1</integerConstant></term></expression>' !
-'<expression><term><identifier>x</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression>'
+'<expression><term><identifier>x</identifier></term></expression><symbol>,</symbol><expression><term><symbol>(</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term><symbol>-</symbol><term><integerConstant>1</integerConstant></term></expression><symbol>,</symbol><expression><term><identifier>x</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>,</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression></expressionList>'
