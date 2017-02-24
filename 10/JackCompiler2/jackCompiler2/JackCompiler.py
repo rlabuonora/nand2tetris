@@ -261,7 +261,9 @@ STATEMENTS = {
     "return":
 """
 <returnStatement>
-{0}
+  <keyword> return </keyword>
+  {0}
+  <symbol> ; </symbol>
 </returnStatement>
 """,
     
