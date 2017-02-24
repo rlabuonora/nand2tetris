@@ -8,8 +8,8 @@ def read_program(source):
 
 def remove_whitespace(str):
     return str.replace(" ", "").replace("\n", "")
-    
-    
+
+
 class TestCompileExpression(unittest.TestCase):
 
     # Helpers
@@ -23,7 +23,7 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-    
+
     def test_unary_op(self):
         prog = '~x'
         actual = JackCompiler(prog).compile_expression()
@@ -37,9 +37,9 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
-        
-    
+
+
+
     def test_binary_op(self):
         prog = 'x + size'
         actual = JackCompiler(prog).compile_expression()
@@ -54,7 +54,7 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
+
 
     def test_integer_constant(self):
         prog = '1'
@@ -78,7 +78,7 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
+
     def test_string_constant(self):
         prog = '"algo"'
         actual = JackCompiler(prog).compile_expression()
@@ -89,7 +89,6 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-
 
     def test_expression_list(self):
         prog = 'x, (y + size) - 1, x + size, y + size'
@@ -166,10 +165,10 @@ class TestCompileExpression(unittest.TestCase):
   </term>
 </expression>
 """
-        
+
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
-    
+
+
     def test_inequality_2(self):
         prog = '(x + size) < 510'
         actual = JackCompiler(prog).compile_expression()
@@ -197,25 +196,42 @@ class TestCompileExpression(unittest.TestCase):
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
 
+    def test_subroutine_call_with_args(self):
+        prog = "Memory.deAlloc(x)"
+        actual = JackCompiler(prog).compile_class_call()
+        expected = """
+<identifier> Memory </identifier>
+<symbol> . </symbol>
+<identifier> deAlloc </identifier>
+<symbol> ( </symbol>
+<expressionList>
+<expression>
+<term>
+<identifier> x </identifier>
+</term>
+</expression>
+</expressionList>
+<symbol> ) </symbol>
+"""
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
     def test_class_subroutine_call(self):
         prog = 'SquareGame.new()'
-        actual = JackCompiler(prog).compile_expression()
-        expected = """<expression>
-  <term>
-    <identifier> SquareGame </identifier>
+        actual = JackCompiler(prog).compile_class_call()
+        expected = """
+  <identifier> SquareGame </identifier>
     <symbol> . </symbol>
     <identifier> new </identifier>
     <symbol> ( </symbol>
     <expressionList>
     </expressionList>
     <symbol> ) </symbol>
-  </term>
-</expression>
 """
-        
+
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
-    
+
+
+
     def test_simple_subroutine_call(self):
         prog = 'foo()'
         actual = JackCompiler(prog).compile_expression()
@@ -230,7 +246,7 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
+
     def test_array_access(self):
         prog = 'a[i]'
         actual = JackCompiler(prog).compile_expression()
@@ -248,6 +264,6 @@ class TestCompileExpression(unittest.TestCase):
 </expression>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        
+
 if __name__ == '__main__':
     unittest.main()

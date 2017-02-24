@@ -1,6 +1,2 @@
-'<expressionList><expression><term><identifier>x</identifier></term><symbol>,</symbol><term><symbol>(</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term></expression></expressionList>'
-
-'<expressionList><expression><term><identifier>x</identifier></term></expression><symbol>,</symbol><expression><term><symbol>(</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>)</symbol></term><symbol>-</symbol><term><integerConstant>1</integerConstant></term></expression><symbol>,</symbol><expression><term><identifier>x</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression><symbol>,</symbol><expression><term><identifier>y</identifier></term><symbol>+</symbol><term><identifier>size</identifier></term></expression></expressionList>'
-
-'<expression><term><keywordConstant>this</keywordConstant></term></expression>'
-'<expression><term><keywordConstant>1</keywordConstant></term></expression>'
+'<expression><term><identifier>foo</identifier><symbol>(</symbol><expressionList><expression>None</expression></expressionList><symbol>)</symbol></term></expression>'
+'<expression><term><identifier>foo</identifier><symbol>(</symbol><expressionList></expressionList><symbol>)</symbol></term></expression>'

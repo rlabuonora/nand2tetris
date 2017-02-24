@@ -37,14 +37,22 @@ class JackCompiler:
 
 
     def end_of_list(self):
-        return (len(self._tokens) == 0 or self._tokens[0].value != ',')
+        return (len(self._tokens) == 0 or self._tokens[0].value == ')')
     
     def compile_expression_list(self):
-        exps = [self.compile_expression()]
-        while (not self.end_of_list()):
-            self.eat(value=',')
-            exp = self.compile_expression()
-            exps.append(exp)
+        exps = []
+        while (True):
+            if self.end_of_list():
+                break
+            else:
+                exp = self.compile_expression()
+                exps.append(exp)
+            if self.end_of_list():
+                break
+            else:
+                self.eat(value=',')
+                
+                
         base = templates["expression_list"]
         expressions = "<symbol> , </symbol>".join(exps)
         return base.format(expressions)
@@ -102,7 +110,9 @@ class JackCompiler:
         base = templates["subroutine_call"]["fun"]
         fun_name = self.eat(type='identifier')
         self.eat(value='(')
-        fun_tree = base.format(fun_name)
+        exp_list = self.compile_expression_list()
+        self.eat(value=')')
+        fun_tree = base.format(fun_name, exp_list)
         fun_base = templates["subroutine_call"]["base"]
         return fun_base.format(cls_tree, fun_tree)
     
@@ -110,7 +120,9 @@ class JackCompiler:
         base = templates["subroutine_call"]["fun"]
         fun_name = self.eat(type='identifier')
         self.eat(value='(')
-        fun_tree = base.format(fun_name)
+        exp_list = self.compile_expression_list()
+        self.eat(value=')')
+        fun_tree = base.format(fun_name, exp_list)
         fun_base = templates["subroutine_call"]["base"]
         return fun_base.format("", fun_tree)
 
@@ -131,7 +143,6 @@ class JackCompiler:
 
     def compile_term(self):
         next_token = self._tokens[0]
-        
         if next_token.type == 'integerConstant':
             return self.compile_integer_constant()
         elif next_token.type == 'stringConstant':
@@ -149,9 +160,9 @@ class JackCompiler:
             else:
                 token = self._tokens[1]
                 if token.value == '.':
-                    return self.compile_class_call()
+                    return "<term>\n" + self.compile_class_call() + "</term>\n"
                 elif token.value == '(':
-                    return self.compile_fun_call()
+                    return "<term>\n" + self.compile_fun_call() + "</term>\n"
                 elif token.value == '[':
                     return self.compile_array_access()
 
@@ -232,8 +243,7 @@ templates = {
     """    
     <identifier> {0} </identifier>
     <symbol> ( </symbol>
-    <expressionList>
-    </expressionList>
+    {1}
     <symbol> ) </symbol>
     """,
     "class":
@@ -243,10 +253,10 @@ templates = {
     """,
     "base":
     """
-    <term>
+
     {0}
     {1}
-    </term>
+
     """
   }
 }
