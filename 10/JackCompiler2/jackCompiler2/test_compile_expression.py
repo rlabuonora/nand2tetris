@@ -198,7 +198,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_subroutine_call_with_args(self):
         prog = "Memory.deAlloc(x)"
-        actual = JackCompiler(prog).compile_class_call()
+        actual = JackCompiler(prog).compile_fun_call()
         expected = """
 <identifier> Memory </identifier>
 <symbol> . </symbol>
@@ -217,7 +217,7 @@ class TestCompileExpression(unittest.TestCase):
 
     def test_class_subroutine_call(self):
         prog = 'SquareGame.new()'
-        actual = JackCompiler(prog).compile_class_call()
+        actual = JackCompiler(prog).compile_fun_call()
         expected = """
   <identifier> SquareGame </identifier>
     <symbol> . </symbol>

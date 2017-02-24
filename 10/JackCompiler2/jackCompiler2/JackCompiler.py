@@ -16,7 +16,7 @@ class JackCompiler:
     def subroutine_call(self):
         tokenVal = self._tokens[1].value
         return  ( tokenVal == '.' or tokenVal == '(')
-    
+
     def end_of_term(self):
         if len(self._tokens) == 1:
             return True
@@ -38,7 +38,7 @@ class JackCompiler:
 
     def end_of_list(self):
         return (len(self._tokens) == 0 or self._tokens[0].value == ')')
-    
+
     def compile_expression_list(self):
         exps = []
         while (True):
@@ -51,12 +51,10 @@ class JackCompiler:
                 break
             else:
                 self.eat(value=',')
-                
-                
         base = templates["expression_list"]
         expressions = "<symbol> , </symbol>".join(exps)
         return base.format(expressions)
-            
+
     def compile_expression(self):
         base = templates["expression"]
         term1 =  self.compile_term()
@@ -66,7 +64,7 @@ class JackCompiler:
             term2 = self.compile_term()
             return base.format(term1, sym_tag, term2)
         return base.format(term1, "", "") # TODO: refactor to use default
-        
+
     def has_op(self):
         if len(self._tokens) < 1:
             return False
@@ -88,43 +86,17 @@ class JackCompiler:
         base = templates["keyword_constant"]
         s = self.eat(type="keyword")
         return base.format(s)
-    
+
     def compile_var_name(self):
         base = templates["var_name"]
         var_name = self.eat(type='identifier')
         return base.format(var_name)
-    
+
     def compile_unary_op(self):
         base = templates["unary_op"]
         sym = self.eat(type="symbol")
         term = self.compile_term()
         return base.format(sym, term)
-    
-    def compile_class_call(self):
-        cls_base = templates["subroutine_call"]["class"]
-        cls_name = self.eat(type='identifier')
-        cls_tree = cls_base.format(cls_name)
-        self.eat(value='.')
-        # TODO: refactor with compile_fun_call
-        fun_base = templates["subroutine_call"]["fun"]
-        base = templates["subroutine_call"]["fun"]
-        fun_name = self.eat(type='identifier')
-        self.eat(value='(')
-        exp_list = self.compile_expression_list()
-        self.eat(value=')')
-        fun_tree = base.format(fun_name, exp_list)
-        fun_base = templates["subroutine_call"]["base"]
-        return fun_base.format(cls_tree, fun_tree)
-    
-    def compile_fun_call(self):
-        base = templates["subroutine_call"]["fun"]
-        fun_name = self.eat(type='identifier')
-        self.eat(value='(')
-        exp_list = self.compile_expression_list()
-        self.eat(value=')')
-        fun_tree = base.format(fun_name, exp_list)
-        fun_base = templates["subroutine_call"]["base"]
-        return fun_base.format("", fun_tree)
 
     def compile_array_access(self):
         base = templates["array_access"]
@@ -140,6 +112,32 @@ class JackCompiler:
         expression = self.compile_expression()
         self.eat(value=')')
         return base.format(expression)
+
+    def compile_call_prefix(self):
+        if self._tokens[1].value == '.':
+            cls_base = templates["subroutine_call"]["class"]
+            cls_name = self.eat(type='identifier')
+            cls_tree = cls_base.format(cls_name)
+            self.eat(value='.')
+            return cls_tree
+        else:
+            return ""
+
+    def compile_call_suffix(self):
+        base = templates["subroutine_call"]["fun"]
+        fun_name = self.eat(type='identifier')
+        return base.format(fun_name)
+
+
+    def compile_fun_call(self):
+        cls_tree = self.compile_call_prefix()
+        fun_tree = self.compile_call_suffix()
+        self.eat(value='(')
+        exp_list = self.compile_expression_list()
+        self.eat(value=')')
+        base = templates["subroutine_call"]["base"]
+        return base.format(cls_tree, fun_tree, exp_list)
+
 
     def compile_term(self):
         next_token = self._tokens[0]
@@ -159,23 +157,28 @@ class JackCompiler:
                 return self.compile_var_name()
             else:
                 token = self._tokens[1]
-                if token.value == '.':
-                    return "<term>\n" + self.compile_class_call() + "</term>\n"
-                elif token.value == '(':
+                if token.value == '.' or token.value == '(':
                     return "<term>\n" + self.compile_fun_call() + "</term>\n"
                 elif token.value == '[':
                     return self.compile_array_access()
 
-    
-    def compileClass(self):
-        return "output.txt\n"
+
+    def compile_statement(self):
+        next_token = self._tokens[0]
+        if next_token.value == 'do':
+            return self.compile_do()
+
+    def compile_do(self):
+        self.eat(value='do')
+        call = self.compile_sub_call()
 
 
 
 
 
 
-        
+
+
 templates = {
     "symbol":
     "<symbol> {0} </symbol>",
@@ -198,16 +201,16 @@ templates = {
 <term>
   <integerConstant> {0} </integerConstant>
 </term>""",
-    "string_constant":    
+    "string_constant":
 """
 <term>
   <stringConstant> {0}  </stringConstant>
 </term>""",
-    "keyword_constant":    
+    "keyword_constant":
 """
 <term>
   <keywordConstant> {0}  </keywordConstant>
-</term>""",    
+</term>""",
     "var_name":
 """
 <term>
@@ -222,7 +225,7 @@ templates = {
   {1}
 <symbol> ] </symbol>
 </term>
-""",    
+""",
     "unary_op":
 """
 <term>
@@ -239,27 +242,22 @@ templates = {
   </term>
 """,
     "subroutine_call":
-  { "fun":
-    """    
-    <identifier> {0} </identifier>
-    <symbol> ( </symbol>
-    {1}
-    <symbol> ) </symbol>
-    """,
-    "class":
+  { "class":
     """
     <identifier> {0} </identifier>
     <symbol> . </symbol>
     """,
+    "fun":
+    """
+    <identifier> {0} </identifier>
+    """,
     "base":
     """
-
     {0}
     {1}
-
+    <symbol> ( </symbol>
+    {2}
+    <symbol> ) </symbol>
     """
   }
 }
-
-
-
