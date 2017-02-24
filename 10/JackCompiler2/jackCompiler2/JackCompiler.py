@@ -58,7 +58,9 @@ class JackCompiler:
     def compile_expression(self):
         base = templates["expression"]
         term1 =  self.compile_term()
-        if self.has_op():
+        if term1 is None:
+            return ""
+        elif self.has_op():
             sym_char = self.eat('symbol')
             sym_tag = templates["symbol"].format(sym_char)
             term2 = self.compile_term()
@@ -167,15 +169,133 @@ class JackCompiler:
         next_token = self._tokens[0]
         if next_token.value == 'do':
             return self.compile_do()
+        elif next_token.value == 'let':
+            return self.compile_let()
+        elif next_token.value == 'if':
+            return self.compile_if()
+        elif next_token.value == "while":
+            return self.compile_while()
+        elif next_token.value == "return":
+            return self.compile_return()
 
+    def end_of_statements(self):
+        return self._tokens[0].value == '}'
+    
+    def compile_statements(self):
+        statements = []
+        while (True):
+            if self.end_of_statements():
+                break
+            else:
+                statement = self.compile_statement()
+                statements.append(statement)
+        statements = "\n".join(statements)
+        base = STATEMENTS["statements"]
+        return base.format(statements)
+    
+    def compile_if(self):
+        self.eat(value='if')
+        self.eat(value='(')
+        condition = self.compile_expression()
+        self.eat(value=')')
+        self.eat(value='{')
+        statements = self.compile_statements()
+        self.eat(value='}')
+        base = STATEMENTS["if"]
+        return base.format(condition, statements)
+        
+        
     def compile_do(self):
         self.eat(value='do')
-        call = self.compile_sub_call()
+        call = self.compile_fun_call()
+        self.eat(value=';')
+        base = STATEMENTS["do"]
+        return base.format(call)
 
+    def compile_let(self):
+        self.eat(value='let')
+        var_name = self.eat(type='identifier')
+        self.eat(value='=')
+        expr = self.compile_expression()
+        self.eat(value=';')
+        base = STATEMENTS["let"]
+        return base.format(var_name, expr)
 
+    def compile_while(self):
+        self.eat(value='while')
+        self.eat(value='(')
+        condition = self.compile_expression()
+        self.eat(value=')')
+        self.eat(value='{')
+        statements = self.compile_statements()
+        self.eat(value='}')
+        base = STATEMENTS["while"]
+        return base.format(condition, statements)
 
-
-
+    def compile_return(self):
+        self.eat(value="return")
+        expression = self.compile_expression()
+        base = STATEMENTS["return"]
+        return base.format(expression)
+    
+        
+STATEMENTS = {
+    "if":
+"""
+<ifStatement>
+  <keyword> if </keyword>
+  <symbol> ( </symbol>
+  {0}
+  <symbol> ) </symbol>
+  <symbol> {{ </symbol>
+  {1}
+  <symbol> }} </symbol>
+</ifStatement>
+""",
+    "statements":
+"""    
+<statements>
+{0}
+</statements>
+""",
+    "return":
+"""
+<returnStatement>
+{0}
+</returnStatement>
+""",
+    
+    "while":
+"""
+<whileStatement>
+  <keyword> while </keyword>
+  <symbol> ( </symbol>
+  {0}
+  <symbol> ) </symbol>
+  <symbol> {{ </symbol>
+  {1}
+  <symbol> }} </symbol>
+  </whileStatement>"
+""",
+    "do":
+"""
+<doStatement>
+  <keyword> do </keyword>
+  {0}
+  <symbol> ; </symbol>
+</doStatement>
+""",
+    "let":
+"""
+<letStatement>
+  <keyword> let </keyword>
+  <identifier> {0} </identifier>
+  <symbol> = </symbol>
+  {1}
+  <symbol> ; </symbol>
+</letStatement>
+"""
+    }
 
 
 

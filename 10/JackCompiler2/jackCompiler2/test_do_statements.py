@@ -1,6 +1,6 @@
+
 from JackCompiler import JackCompiler
 import unittest
-
 
 
 def read_program(source):
@@ -12,10 +12,10 @@ def remove_whitespace(str):
     return str.replace(" ", "").replace("\n", "")
 
 
-class TestCompileExpression(unittest.TestCase):
+class TestCompileDoStatement(unittest.TestCase):
 
-    
-    def test_do_statment(self):
+
+    def test_do_statement(self):
         prog = "do moveSquare();";
         actual = JackCompiler(prog).compile_statement()
         expected =  """<doStatement>
@@ -27,6 +27,107 @@ class TestCompileExpression(unittest.TestCase):
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+"""
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
+    def test_do_statement_2(self):
+            
+        prog = "do square.move();";
+        actual = JackCompiler(prog).compile_statement()
+        expected =  """<doStatement>
+<keyword> do </keyword>
+<identifier> square </identifier>
+<symbol> . </symbol>
+<identifier> move </identifier>
+<symbol> ( </symbol>
+<expressionList>
+</expressionList>
+<symbol> ) </symbol>
+<symbol> ; </symbol>
+</doStatement>      
+"""            
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+        
+    def test_do_statement_3(self):
+        prog = "do Memory.deAlloc(x);";
+        actual = JackCompiler(prog).compile_statement()
+        expected = """
+<doStatement>
+<keyword> do </keyword>
+<identifier> Memory </identifier>
+<symbol> . </symbol>
+<identifier> deAlloc </identifier>
+<symbol> ( </symbol>
+<expressionList>
+<expression>
+<term>
+<identifier> x </identifier>
+</term>
+</expression>
+</expressionList>
+<symbol> ) </symbol>
+<symbol> ; </symbol>
+</doStatement>    
+"""            
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
+    def test_do_statement_4(self):
+        prog = "do Memory.deAlloc(x, y);";
+        actual = JackCompiler(prog).compile_statement()
+        expected = """
+<doStatement>
+<keyword> do </keyword>
+<identifier> Memory </identifier>
+<symbol> . </symbol>
+<identifier> deAlloc </identifier>
+<symbol> ( </symbol>
+<expressionList>
+<expression>
+<term>
+<identifier> x </identifier>
+</term>
+</expression>
+<symbol> , </symbol>
+<expression>
+<term>
+<identifier> y </identifier>
+</term>
+</expression>
+</expressionList>
+<symbol> ) </symbol>
+<symbol> ; </symbol>
+</doStatement>
+"""            
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+            
+class TestCompileLetStatement(unittest.TestCase):
+        def test_let_statement(self):
+            prog = 'let x = x;'
+            actual = JackCompiler(prog).compile_statement()
+            expected ="""
+<letStatement>
+<keyword> let </keyword>
+<identifier> x </identifier>
+<symbol> = </symbol>
+<expression>
+<term>
+<identifier> x </identifier>
+</term>
+</expression>
+<symbol> ; </symbol>
+</letStatement>
+"""
+            self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+            
+class TestReturnStatement(unittest.TestCase):
+    def test_return_statement(self):
+        prog = 'return;'
+        actual = JackCompiler(prog).compile_statement()
+        expected ="""
+<returnStatement>
+<keyword> return </keyword>
+<symbol> ; </symbol>
+</returnStatement>
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 

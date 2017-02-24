@@ -707,7 +707,7 @@ describe('statement', function() {
             chai.assert.equalIgnoreSpaces(actual, expected);
 
         });
-        it('do square.move();', function() {
+        xit('do square.move();', function() {
             var prog = "do square.move();";
             engine.tokens = tokenizer.tokenize( prog );
             var actual = engine.compileDo();
@@ -725,7 +725,7 @@ describe('statement', function() {
             chai.assert.equalIgnoreSpaces(actual, expected);
 
         });
-        it('do with one arg', function() {
+        xit('do with one arg', function() {
             var prog = "do Memory.deAlloc(x);";
             engine.tokens = tokenizer.tokenize( prog );
             var actual = engine.compileDo();
@@ -749,7 +749,7 @@ describe('statement', function() {
             chai.assert.equalIgnoreSpaces(actual, expected);
         });
 
-        it('subrountine calls', function() {
+        xit('subrountine calls', function() {
             var prog = "Memory.deAlloc(x);";
             engine.tokens = tokenizer.tokenize( prog );
             var actual = engine.compileSubroutineCall();
@@ -769,7 +769,7 @@ describe('statement', function() {
             assert.equal(engine.tokens.length, 1);
         });
 
-        it('do with two expressions', function() {
+        xit('do with two expressions', function() {
             var prog = "do Memory.deAlloc(x, y);";
             engine.tokens = tokenizer.tokenize( prog );
             var actual = engine.compileDo();
