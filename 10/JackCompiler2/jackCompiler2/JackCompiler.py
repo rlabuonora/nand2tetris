@@ -242,9 +242,22 @@ class JackCompiler:
         self.eat(value=';')
         return base.format(expression)
 
-    def compile_local_var_dec(self):
+
+    def compile_local_var_decs(self):
+        # follow same pattern as compile_statements
+        local_var_decs = []
+        while (len(self._tokens) > 0):
+            local_var_dec = self.compile_local_var_dec()
+            if not local_var_dec:
+               break
+            else:
+                local_var_decs.append(local_var_dec)
+        declarations = "\n".join(local_var_decs)
+        return declarations
+            
+    def compile_local_var_dec(self):        
         if (self._tokens[0].value != "var"):
-            return "" # fail silently if called at the wrong time
+            return False
         self.eat(value="var")
         typ = self.compile_type()
         ident = self.compile_identifier()
@@ -266,15 +279,48 @@ class JackCompiler:
         next_token_type = self._tokens[0].type
         next_token_val = self.eat()
         return base.format(next_token_type, next_token_val)
+
+
+    # same pattern as in compile expression list REFACTOR
+    def compile_param(self):
+        typ = self.compile_type()
+        param_name = self.compile_identifier()
+        return typ + "\n" + param_name
+
+    def compile_param_list(self):
+        params = []
+        while (True):
+            if self.end_of_list():
+                break
+            else:
+                param = self.compile_param()
+                params.append(param)
+                if self.end_of_list():
+                    break
+                else:
+                    self.eat(value=',')
+        base = STRUCTURE["param_list"]
+        parameters = "<symbol> , </symbol>".join(params)
+        return base.format(parameters)                    
+        
         
     def compile_subroutine_body(self):
         self.eat(value='{')
-        variable_declarations = self.compile_local_var_dec() # only one!
+        variable_declarations = self.compile_local_var_decs() # only one!
         statements = self.compile_statements()
-        print statements
         self.eat(value='}')
         base = STRUCTURE["subroutine_body"]
         return base.format(variable_declarations, statements)
+
+    def compile_subroutine_declaration(self):
+        subroutine_type = self.eat('keyword')
+        return_type = self.compile_type()
+        fun_name = self.compile_identifier()
+        self.eat(value='(')
+        parameter_list = self.compile_parameter_list()
+        self.eat(value=')')
+        body = self.compile_subroutine_body(self)
+        STRUCTURE["subroutine"].format(subroutine_type, retrun_type, fun_name, parameter_list, body)
         
 STATEMENTS = {
     "if":
@@ -339,6 +385,12 @@ STATEMENTS = {
 
 
 STRUCTURE = {
+    "param_list":
+"""
+<parameterList>
+{0}
+</parameterList>
+""",
     "variable_declaration":
 """
 <varDec>

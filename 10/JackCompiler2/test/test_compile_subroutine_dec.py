@@ -130,6 +130,43 @@ class TestSubroutineBody(unittest.TestCase):
         actual = JackCompiler(prog).compile_subroutine_body()
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
+    def test_local_vars_of_multiple_types(self):
+        prog = """
+{
+  var int x;
+  var boolean a, b;
+  return;
+}
+"""
+        expected = """
+<subroutineBody>
+  <symbol> { </symbol>
+  <varDec>
+    <keyword> var </keyword>
+    <keyword> int </keyword>
+    <identifier> x </identifier>
+    <symbol> ; </symbol>
+  </varDec>
+  <varDec>
+    <keyword> var </keyword>
+    <keyword> boolean </keyword>
+    <identifier> a </identifier>
+    <symbol> , </symbol>
+    <identifier> b </identifier>
+    <symbol> ; </symbol>
+  </varDec>
+  <statements>
+   <returnStatement>
+     <keyword> return </keyword>
+     <symbol> ; </symbol>
+    </returnStatement>
+  </statements>
+  <symbol> } </symbol>
+</subroutineBody>
+"""
+        actual = JackCompiler(prog).compile_subroutine_body()
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
 
 class TestSubroutineDeclaration(unittest.TestCase):        
     @unittest.skip("skip")
