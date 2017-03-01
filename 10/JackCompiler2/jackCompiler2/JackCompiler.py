@@ -58,6 +58,7 @@ class JackCompiler:
     def compile_expression(self):
         base = TEMPLATES["expression"]
         term1 =  self.compile_term()
+        # compile term can return none if there is no term to compile
         if term1 is None:
             return ""
         elif self.has_op():
@@ -142,6 +143,7 @@ class JackCompiler:
 
 
     def compile_term(self):
+        # can return None 
         next_token = self._tokens[0]
         if next_token.type == 'integerConstant':
             return self.compile_integer_constant()
@@ -180,9 +182,6 @@ class JackCompiler:
         else:
             return False
 
-    def end_of_statements(self):
-        return self._tokens[0].value == '}'
-    
     def compile_statements(self):
         statements = []
         while (len(self._tokens) > 0):
@@ -237,10 +236,40 @@ class JackCompiler:
 
     def compile_return(self):
         self.eat(value="return")
-        expression = self.compile_expression()
+        # optional, if no expression this call does nothing (same as local var decs)
+        expression = self.compile_expression() 
         base = STATEMENTS["return"]
+        self.eat(value=';')
         return base.format(expression)
+
+    def compile_local_var_dec(self):
+        self.eat(value="var")
+        typ = self.compile_type()
+        ident = self.compile_identifier()
+        idents =  [ident]
+        while (self._tokens[0].value == ','):
+            self.eat(value=',')
+            ident = self.compile_identifier()
+            idents.append(ident)
+        variables = "<symbol> , </symbol>".join(idents)
+        return STRUCTURE["variable_declaration"].format(typ, variables)
+
+
+    def compile_identifier(self):
+        return STRUCTURE["tag"].format('identifier', self.eat(type='identifier'))
     
+    def compile_type(self):
+        base = STRUCTURE["tag"]
+        next_token_type = self._tokens[0].type
+        next_token_val = self.eat()
+        return base.format(next_token_type, next_token_val)
+        
+    def compile_subroutine_body(self):
+        self.eat(value='{')
+        statements = self.compile_statements()
+        self.eat(value='}')
+        base = STRUCTURE["subroutine_body"]
+        return base.format(statements)
         
 STATEMENTS = {
     "if":
@@ -303,6 +332,30 @@ STATEMENTS = {
     }
 
 
+
+STRUCTURE = {
+    "variable_declaration":
+"""
+<varDec>
+<keyword> var </keyword>
+  {0}
+  {1}
+<symbol> ; </symbol>
+</varDec>
+""",
+    "tag":
+"""
+<{0}> {1} </{0}>
+""",
+    "subroutine_body":
+"""
+<subroutineBody>
+<symbol> {{ </symbol>
+{0}
+<symbol> }} </symbol>
+</subroutineBody>
+"""    
+    }
 
 TEMPLATES = {
     "symbol":

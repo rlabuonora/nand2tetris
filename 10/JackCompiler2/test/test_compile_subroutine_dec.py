@@ -20,7 +20,7 @@ class TestLocalVariables(unittest.TestCase):
 <varDec>
 <keyword> var </keyword>
 <keyword> int </keyword>
-identifier> x </identifier>
+<identifier> x </identifier>
 <symbol> ; </symbol>
 </varDec>
 """
@@ -42,7 +42,24 @@ identifier> x </identifier>
 </varDec>
 """
             self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
             
+        def test_class_types(self):
+            prog = "var Point x, y, z;"
+            actual = JackCompiler(prog).compile_local_var_dec()
+            expected = """
+<varDec>
+  <keyword> var </keyword>
+  <identifier> Point </identifier>
+  <identifier> x </identifier>
+  <symbol> , </symbol>
+  <identifier> y </identifier>
+  <symbol> , </symbol>
+  <identifier> z </identifier>
+  <symbol> ; </symbol>
+</varDec>
+"""
+            self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))            
             
 
 class TestSubroutineBody(unittest.TestCase):
