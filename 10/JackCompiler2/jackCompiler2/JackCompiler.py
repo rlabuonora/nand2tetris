@@ -51,18 +51,18 @@ class JackCompiler:
                 break
             else:
                 self.eat(value=',')
-        base = templates["expression_list"]
+        base = TEMPLATES["expression_list"]
         expressions = "<symbol> , </symbol>".join(exps)
         return base.format(expressions)
 
     def compile_expression(self):
-        base = templates["expression"]
+        base = TEMPLATES["expression"]
         term1 =  self.compile_term()
         if term1 is None:
             return ""
         elif self.has_op():
             sym_char = self.eat('symbol')
-            sym_tag = templates["symbol"].format(sym_char)
+            sym_tag = TEMPLATES["symbol"].format(sym_char)
             term2 = self.compile_term()
             return base.format(term1, sym_tag, term2)
         return base.format(term1, "", "") # TODO: refactor to use default
@@ -75,33 +75,33 @@ class JackCompiler:
         return not (re.match(regexp, next_token) is None)
 
     def compile_integer_constant(self):
-        base = templates["integer_constant"]
+        base = TEMPLATES["integer_constant"]
         n = self.eat() # pass optional value/type for error correction
         return  base.format(n)
 
     def compile_string_constant(self):
-        base = templates["string_constant"]
+        base = TEMPLATES["string_constant"]
         s = self.eat(type="stringConstant")
         return base.format(s)
 
     def compile_keyword_constant(self):
-        base = templates["keyword_constant"]
+        base = TEMPLATES["keyword_constant"]
         s = self.eat(type="keyword")
         return base.format(s)
 
     def compile_var_name(self):
-        base = templates["var_name"]
+        base = TEMPLATES["var_name"]
         var_name = self.eat(type='identifier')
         return base.format(var_name)
 
     def compile_unary_op(self):
-        base = templates["unary_op"]
+        base = TEMPLATES["unary_op"]
         sym = self.eat(type="symbol")
         term = self.compile_term()
         return base.format(sym, term)
 
     def compile_array_access(self):
-        base = templates["array_access"]
+        base = TEMPLATES["array_access"]
         array_name = self.eat(type='identifier')
         self.eat(value='[')
         array_index = self.compile_expression()
@@ -109,7 +109,7 @@ class JackCompiler:
         return base.format(array_name, array_index)
 
     def compile_paren(self):
-        base = templates["parens"]
+        base = TEMPLATES["parens"]
         self.eat(value='(')
         expression = self.compile_expression()
         self.eat(value=')')
@@ -117,7 +117,7 @@ class JackCompiler:
 
     def compile_call_prefix(self):
         if self._tokens[1].value == '.':
-            cls_base = templates["subroutine_call"]["class"]
+            cls_base = TEMPLATES["subroutine_call"]["class"]
             cls_name = self.eat(type='identifier')
             cls_tree = cls_base.format(cls_name)
             self.eat(value='.')
@@ -126,7 +126,7 @@ class JackCompiler:
             return ""
 
     def compile_call_suffix(self):
-        base = templates["subroutine_call"]["fun"]
+        base = TEMPLATES["subroutine_call"]["fun"]
         fun_name = self.eat(type='identifier')
         return base.format(fun_name)
 
@@ -137,7 +137,7 @@ class JackCompiler:
         self.eat(value='(')
         exp_list = self.compile_expression_list()
         self.eat(value=')')
-        base = templates["subroutine_call"]["base"]
+        base = TEMPLATES["subroutine_call"]["base"]
         return base.format(cls_tree, fun_tree, exp_list)
 
 
@@ -277,7 +277,7 @@ STATEMENTS = {
   <symbol> {{ </symbol>
   {1}
   <symbol> }} </symbol>
-  </whileStatement>"
+  </whileStatement>
 """,
     "do":
 """
@@ -301,7 +301,7 @@ STATEMENTS = {
 
 
 
-templates = {
+TEMPLATES = {
     "symbol":
     "<symbol> {0} </symbol>",
     "expression_list":

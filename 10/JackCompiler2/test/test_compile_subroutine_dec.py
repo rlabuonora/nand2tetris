@@ -1,4 +1,5 @@
-
+import unittest, os, sys
+sys.path.append(os.path.abspath('../JackCompiler2/jackCompiler2'))
 from JackCompiler import JackCompiler
 import unittest
 

@@ -1,4 +1,5 @@
-
+import unittest, os, sys
+sys.path.append(os.path.abspath('../JackCompiler2/jackCompiler2'))
 from JackCompiler import JackCompiler
 import unittest
 
@@ -55,9 +56,9 @@ while (key) {
     </doStatement>
   </statements>
   <symbol> } </symbol>
-</whileStatement>"
+</whileStatement>
 """
-            actual = JackCompiler(prog).compile_while_statement()
+            actual = JackCompiler(prog).compile_while()
             self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
         def test_while_statement2(self):
@@ -93,7 +94,7 @@ while (key) {
   <symbol> } </symbol>
 </whileStatement>
 """
-            actual = JackCompiler(prog).compile_while_statement()
+            actual = JackCompiler(prog).compile_while()
             self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))         
                 
             

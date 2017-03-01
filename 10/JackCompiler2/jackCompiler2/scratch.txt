@@ -1,2 +1,0 @@
-'<expression><term><identifier>foo</identifier><symbol>(</symbol><expressionList><expression>None</expression></expressionList><symbol>)</symbol></term></expression>'
-'<expression><term><identifier>foo</identifier><symbol>(</symbol><expressionList></expressionList><symbol>)</symbol></term></expression>'
