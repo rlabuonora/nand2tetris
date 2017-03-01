@@ -12,7 +12,7 @@ describe("expression", function() {
     var tokenizer = new JackTokenizer();
     var engine = new CompilationEngine();
 
-    it('var name', function() {
+    it('var name', function() { // ported
         var prog = "x)";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -27,7 +27,7 @@ describe("expression", function() {
         assert(engine.tokens[0].value === ')');
     });
 
-    it(' expression with unary op', function() {
+    it(' expression with unary op', function() { // ported
         var prog = "~x";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -44,7 +44,7 @@ describe("expression", function() {
 
     });
 
-    it('expression with binary op', function() {
+    it('expression with binary op', function() { // ported
         var prog = "x + size";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -60,7 +60,7 @@ describe("expression", function() {
         chai.assert.equalIgnoreSpaces(actual, expected);
     });
 
-    it('integer constant', function() {
+    it('integer constant', function() { // ported
         var prog = "1";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -72,7 +72,7 @@ describe("expression", function() {
         chai.assert.equalIgnoreSpaces(actual, expected);
     });
 
-    it('string constant', function() {
+    it('string constant', function() {  // ported
         var prog = '"algo"';
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -85,7 +85,7 @@ describe("expression", function() {
     });
 
 
-    it('keyword constant', function() {
+    it('keyword constant', function() { // ported
         var prog = "this";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -97,7 +97,7 @@ describe("expression", function() {
         chai.assert.equalIgnoreSpaces(actual, expected);
     });
 
-    it("expression list", function() {
+    it("expression list", function() { // ported
         var prog = "(x, (y + size) - 1, x + size, y + size)";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpressionList();
@@ -150,7 +150,7 @@ describe("expression", function() {
                 "</expressionList>\n";
         chai.assert.equalIgnoreSpaces(actual, expected);
     });
-    it("inequality",  function() {
+    it("inequality",  function() { // ported
         var prog = "(x + size) < 510";
         engine.tokens = tokenizer.tokenize(prog);
         var actual = engine.compileExpression();
@@ -175,7 +175,7 @@ describe("expression", function() {
                 "</expression>";
         chai.assert.equalIgnoreSpaces(actual, expected);
     });
-    xit("subroutine call", function() {
+    xit("subroutine call", function() { // ported
         var prog = "SquareGame.new();"
         var expected = "<expression>\n" +
                 "<term>\n" +

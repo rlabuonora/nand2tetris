@@ -1,4 +1,3 @@
-
 from JackCompiler import JackCompiler
 import unittest
 
@@ -13,8 +12,6 @@ def remove_whitespace(str):
 
 
 class TestCompileDoStatement(unittest.TestCase):
-
-
     def test_do_statement(self):
         prog = "do moveSquare();";
         actual = JackCompiler(prog).compile_statement()
@@ -100,36 +97,9 @@ class TestCompileDoStatement(unittest.TestCase):
 """            
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
             
-class TestCompileLetStatement(unittest.TestCase):
-        def test_let_statement(self):
-            prog = 'let x = x;'
-            actual = JackCompiler(prog).compile_statement()
-            expected ="""
-<letStatement>
-<keyword> let </keyword>
-<identifier> x </identifier>
-<symbol> = </symbol>
-<expression>
-<term>
-<identifier> x </identifier>
-</term>
-</expression>
-<symbol> ; </symbol>
-</letStatement>
-"""
-            self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
             
-class TestReturnStatement(unittest.TestCase):
-    def test_return_statement(self):
-        prog = 'return;'
-        actual = JackCompiler(prog).compile_statement()
-        expected ="""
-<returnStatement>
-<keyword> return </keyword>
-<symbol> ; </symbol>
-</returnStatement>
-"""
-        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
+
 
 if __name__ == '__main__':
     unittest.main()

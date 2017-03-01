@@ -237,6 +237,7 @@ class TestCompileExpression(unittest.TestCase):
         actual = JackCompiler(prog).compile_expression()
         expected = """<expression>
   <term>
+
     <identifier> foo </identifier>
     <symbol> ( </symbol>
     <expressionList>

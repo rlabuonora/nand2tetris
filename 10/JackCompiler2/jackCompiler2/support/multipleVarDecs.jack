@@ -1,0 +1,7 @@
+class Main { 
+  field int x, y;
+  field Square square;
+  
+  function void main() {
+    return; } 
+};
