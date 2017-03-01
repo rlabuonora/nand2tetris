@@ -72,38 +72,5 @@ describe('statement', function() {
         chai.assert.equalIgnoreSpaces(actual, expected );
 
     });
-    it('statements', function() {
 
-        engine.tokens = tokenizer.tokenize('let x = x;\n do move(); return;');
-        var actual = engine.compileStatements();
-        var expected =
-                "<statements>\n" +
-                "  <letStatement>\n" +
-                "    <keyword> let </keyword>\n" +
-                "    <identifier> x </identifier>\n" +
-                "    <symbol> = </symbol>\n" +
-                "      <expression>\n" +
-                "        <term>\n" +
-                "          <identifier> x </identifier>\n" +
-                "        </term>\n" +
-                "      </expression>\n" +
-                "    <symbol> ; </symbol>" +
-                "  </letStatement>" +
-                "  <doStatement>\n" +
-                "    <keyword> do </keyword>\n" +
-                "    <identifier> move </identifier>\n" +
-                "    <symbol> ( </symbol>\n" +
-                "    <expressionList>\n" +
-                "    </expressionList>\n" +
-                "    <symbol> ) </symbol>\n" +
-                "    <symbol> ; </symbol>\n" +
-                "  </doStatement>\n" +
-                "  <returnStatement>\n" +
-                "    <keyword> return </keyword>\n" +
-                "    <symbol> ; </symbol>\n" +
-                "  </returnStatement>\n" +
-                "</statements>";
-        chai.assert.equalIgnoreSpaces(actual, expected );
-
-    });
 });
