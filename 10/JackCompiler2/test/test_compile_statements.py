@@ -27,8 +27,8 @@ class TestStatements(unittest.TestCase):
           <identifier> x </identifier>
         </term>
       </expression>
-    <symbol> ; </symbol>" +
-  </letStatement>" +
+    <symbol> ; </symbol>
+  </letStatement>
   <doStatement>
     <keyword> do </keyword>
    <identifier> move </identifier>
@@ -42,7 +42,7 @@ class TestStatements(unittest.TestCase):
 """
             actual = JackCompiler(prog).compile_statements()
             self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-        @unittest.skip("infinite loop")
+
         def test_compile_statements2(self):
             prog = "let x = x;\n do move(); return;"
             expected = """
@@ -56,8 +56,8 @@ class TestStatements(unittest.TestCase):
           <identifier> x </identifier>
         </term>
       </expression>
-    <symbol> ; </symbol>" +
-  </letStatement>" +
+    <symbol> ; </symbol>
+  </letStatement>
   <doStatement>
     <keyword> do </keyword>
     <identifier> move </identifier>

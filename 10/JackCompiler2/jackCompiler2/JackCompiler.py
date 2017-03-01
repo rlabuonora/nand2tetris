@@ -177,18 +177,21 @@ class JackCompiler:
             return self.compile_while()
         elif next_token.value == "return":
             return self.compile_return()
+        else:
+            return False
 
     def end_of_statements(self):
         return self._tokens[0].value == '}'
     
     def compile_statements(self):
         statements = []
-        while (True):
-            if self.end_of_statements():
+        while (len(self._tokens) > 0):
+            statement = self.compile_statement()
+            if not statement:
                 break
             else:
-                statement = self.compile_statement()
                 statements.append(statement)
+                
         statements = "\n".join(statements)
         base = STATEMENTS["statements"]
         return base.format(statements)
