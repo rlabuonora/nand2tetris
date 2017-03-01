@@ -23,6 +23,22 @@ class TestReturnStatement(unittest.TestCase):
 """
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
+    def test_return_statement_with_expression(self):
+        prog = 'return x;'
+        actual = JackCompiler(prog).compile_statement()
+        expected ="""
+<returnStatement>
+<keyword> return </keyword>
+  <expression>
+    <term>
+      <identifier> x </identifier>
+    </term>
+  </expression>
+<symbol> ; </symbol>
+</returnStatement>
+"""
+        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))        
+
 
 
 if __name__ == '__main__':
