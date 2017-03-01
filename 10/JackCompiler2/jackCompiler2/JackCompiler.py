@@ -243,6 +243,8 @@ class JackCompiler:
         return base.format(expression)
 
     def compile_local_var_dec(self):
+        if (self._tokens[0].value != "var"):
+            return "" # fail silently if called at the wrong time
         self.eat(value="var")
         typ = self.compile_type()
         ident = self.compile_identifier()
@@ -251,6 +253,7 @@ class JackCompiler:
             self.eat(value=',')
             ident = self.compile_identifier()
             idents.append(ident)
+        self.eat(value=';')
         variables = "<symbol> , </symbol>".join(idents)
         return STRUCTURE["variable_declaration"].format(typ, variables)
 
@@ -266,10 +269,12 @@ class JackCompiler:
         
     def compile_subroutine_body(self):
         self.eat(value='{')
+        variable_declarations = self.compile_local_var_dec() # only one!
         statements = self.compile_statements()
+        print statements
         self.eat(value='}')
         base = STRUCTURE["subroutine_body"]
-        return base.format(statements)
+        return base.format(variable_declarations, statements)
         
 STATEMENTS = {
     "if":
@@ -352,6 +357,7 @@ STRUCTURE = {
 <subroutineBody>
 <symbol> {{ </symbol>
 {0}
+{1}
 <symbol> }} </symbol>
 </subroutineBody>
 """    

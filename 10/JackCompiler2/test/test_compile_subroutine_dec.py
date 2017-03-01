@@ -101,8 +101,8 @@ class TestSubroutineBody(unittest.TestCase):
 """
         actual = JackCompiler(prog).compile_subroutine_body()
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-
-    def test_subroutine_body(self):
+ 
+    def test_local_vars(self):
         prog = """
 {
   var int x;
@@ -131,6 +131,8 @@ class TestSubroutineBody(unittest.TestCase):
         self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
 
 
+class TestSubroutineDeclaration(unittest.TestCase):        
+    @unittest.skip("skip")
     def test_no_args(self):
             prog = """
 method void dispose() {
