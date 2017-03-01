@@ -313,14 +313,15 @@ class JackCompiler:
         return base.format(variable_declarations, statements)
 
     def compile_subroutine_declaration(self):
-        subroutine_type = self.eat('keyword')
+        subroutine_type = self.compile_type()
         return_type = self.compile_type()
         fun_name = self.compile_identifier()
         self.eat(value='(')
-        parameter_list = self.compile_parameter_list()
+        parameter_list = self.compile_param_list()
         self.eat(value=')')
-        body = self.compile_subroutine_body(self)
-        STRUCTURE["subroutine"].format(subroutine_type, retrun_type, fun_name, parameter_list, body)
+        signature = STRUCTURE["signature"].format(subroutine_type, return_type, fun_name, parameter_list)
+        body = self.compile_subroutine_body()
+        return STRUCTURE["subroutine"].format(signature, body)
         
 STATEMENTS = {
     "if":
@@ -385,6 +386,22 @@ STATEMENTS = {
 
 
 STRUCTURE = {
+    "signature":
+"""
+{0}
+{1}
+{2}
+<symbol> ( </symbol>
+{3}
+<symbol> ) </symbol>
+""",
+    "subroutine":
+"""
+<subroutineDec>
+{0}
+{1}
+</subroutineDec>
+""" ,   
     "param_list":
 """
 <parameterList>

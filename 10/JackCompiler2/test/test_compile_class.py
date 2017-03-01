@@ -13,42 +13,7 @@ def remove_whitespace(str):
     return str.replace(" ", "").replace("\n", "")
 
 
-class TestCompileParamList(unittest.TestCase):
 
-    def test_empty_param_list(self):
-        prog = ""
-        expected = "<parameterList>\n</parameterList>\n"
-        actual = JackCompiler(prog).compile_param_list()
-        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-
-
-    def test_one_param(self):
-        expected = """
-<parameterList>
-<keyword> int </keyword>
-<identifier> Ax </identifier>
-</parameterList>
-"""
-        prog = "int Ax"
-        actual = JackCompiler(prog).compile_param_list()
-        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
-
-    def test_three_params(self):
-        expected = """
-<parameterList>
-<keyword> int </keyword>
-<identifier> Ax </identifier>
-<symbol> , </symbol>
-<keyword> int </keyword>
-<identifier> Ay </identifier>
-<symbol> , </symbol>
-<keyword> int </keyword>
-<identifier> Asize </identifier>
-</parameterList>
-"""
-        prog = "int Ax, int Ay, int Asize";
-        actual = JackCompiler(prog).compile_param_list()
-        self.assertEqual(remove_whitespace(actual), remove_whitespace(expected))
         
 class TestCompileVarDec(unittest.TestCase):
     def test_single_var_dec(self):
