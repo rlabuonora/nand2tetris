@@ -536,7 +536,7 @@ TEMPLATES = {
     "keyword_constant":
 """
 <term>
-  <keywordConstant> {0}  </keywordConstant>
+  <keyword> {0}  </keyword>
 </term>""",
     "var_name":
 """
