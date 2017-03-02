@@ -13,8 +13,6 @@ def remove_whitespace(str):
     return str.replace(" ", "").replace("\n", "")
 
 
-
-        
 class TestCompileVarDec(unittest.TestCase):
     def test_single_var_dec(self):
         prog = "field int x;";

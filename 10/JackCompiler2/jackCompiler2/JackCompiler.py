@@ -242,7 +242,45 @@ class JackCompiler:
         self.eat(value=';')
         return base.format(expression)
 
+    def compile_class(self):
+        self.eat(value="class")
+        class_name = self.compile_identifier()
+        self.eat(value='{')
+        class_var_decs = self.compile_class_var_decs()
+        subroutines = self.compile_subroutine_declarations()
+        base = STRUCTURE["class"]
+        return base.format(class_name, class_var_decs, subroutines)
+        
+    
+    def compile_class_var_decs(self):
+        # same pattern as in local_va_decs
+        class_var_decs = []
+        while (len(self._tokens) > 0):
+            class_var_dec = self.compile_class_var_dec()
+            if not class_var_dec:
+                break
+            else:
+                class_var_decs.append(class_var_dec)
+        declarations = "\n".join(class_var_decs)
+        return declarations
 
+    def compile_class_var_dec(self):
+        next_token = self._tokens[0]
+        if (next_token.value != "field" and next_token.value != "static" ):
+            return False
+        field = self.eat(type="keyword")
+        typ = self.compile_type()
+        ident = self.compile_identifier()
+        idents = [ident]
+        
+        while (self._tokens[0].value == ','):
+            self.eat(value=',')
+            ident = self.compile_identifier()
+            idents.append(ident)
+        self.eat(value=';')
+        variables = "<symbol> , </symbol>".join(idents)
+        return STRUCTURE["class_variable_declaration"].format(field, typ, variables)
+    
     def compile_local_var_decs(self):
         # follow same pattern as compile_statements
         local_var_decs = []
@@ -312,10 +350,26 @@ class JackCompiler:
         base = STRUCTURE["subroutine_body"]
         return base.format(variable_declarations, statements)
 
+
+    def compile_subroutine_declarations(self):
+        # same pattern as compile class_var_decs
+        subroutines = []
+        while (len(self._tokens) > 0):
+            subroutine = self.compile_subroutine_declaration()
+            if not subroutine:
+                break
+            else:
+                subroutines.append(subroutine)
+        declarations = "\n".join(subroutines)
+        return declarations
+
     def compile_subroutine_declaration(self):
+        if (self._tokens[0].type != "keyword"):
+            return False
         subroutine_type = self.compile_type()
         return_type = self.compile_type()
         fun_name = self.compile_identifier()
+        
         self.eat(value='(')
         parameter_list = self.compile_param_list()
         self.eat(value=')')
@@ -386,6 +440,17 @@ STATEMENTS = {
 
 
 STRUCTURE = {
+    "class":
+"""
+<class>
+  <keyword> class </keyword>
+  {0}
+  <symbol> {{ </symbol>
+  {1}
+  {2}
+  <symbol> }} </symbol>
+</class>  
+""",
     "signature":
 """
 {0}
@@ -417,6 +482,15 @@ STRUCTURE = {
 <symbol> ; </symbol>
 </varDec>
 """,
+    "class_variable_declaration":
+"""
+<classVarDec>
+<keyword> {0} </keyword>
+{1}
+{2}
+<symbol> ; </symbol>
+</classVarDec>
+""",  
     "tag":
 """
 <{0}> {1} </{0}>

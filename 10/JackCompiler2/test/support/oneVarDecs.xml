@@ -17,7 +17,7 @@
 </classVarDec>
 <classVarDec>
 <keyword> static </keyword>
-<identifier> int </identifier>
+<keyword> int </keyword>
 <identifier> z </identifier>
 <symbol> ; </symbol>
 </classVarDec>
@@ -41,4 +41,4 @@
 </subroutineBody>
 </subroutineDec>
 <symbol> } </symbol>
-"</class>
+</class>
