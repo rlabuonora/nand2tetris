@@ -36,7 +36,7 @@ class JackCompiler:
         return token.value
 
 
-n    def end_of_list(self):
+    def end_of_list(self):
         return (len(self._tokens) == 0 or self._tokens[0].value == ')')
 
     def compile_expression_list(self):
