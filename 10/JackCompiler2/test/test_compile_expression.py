@@ -75,7 +75,7 @@ class TestCompileExpression(unittest.TestCase):
         actual = JackCompiler(prog).compile_expression()
         expected = """<expression>
   <term>
-    <keywordConstant> this </keywordConstant>
+    <keyword> this </keyword>
   </term>
 </expression>
 """

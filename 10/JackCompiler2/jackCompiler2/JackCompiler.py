@@ -164,7 +164,7 @@ class JackCompiler:
                 if token.value == '.' or token.value == '(':
                     return "<term>\n" + self.compile_fun_call() + "</term>\n"
                 elif token.value == '[':
-                    return self.compile_array_access()
+                    return  "<term>\n" + self.compile_array_access() + "</term>\n"
 
 
     def compile_statement(self):
@@ -216,7 +216,14 @@ class JackCompiler:
 
     def compile_let(self):
         self.eat(value='let')
-        var_name = self.eat(type='identifier')
+        token = self._tokens[1]
+        if token.value == '[':
+            #array accesss
+            var_name = self.compile_array_access()
+        elif token.value == '=':
+            var_name = self.compile_identifier()
+            #identifier
+        
         self.eat(value='=')
         expr = self.compile_expression()
         self.eat(value=';')
@@ -429,7 +436,7 @@ STATEMENTS = {
 """
 <letStatement>
   <keyword> let </keyword>
-  <identifier> {0} </identifier>
+  {0}
   <symbol> = </symbol>
   {1}
   <symbol> ; </symbol>
@@ -546,12 +553,10 @@ TEMPLATES = {
 """,
     "array_access":
 """
-<term>
   <identifier> {0} </identifier>
   <symbol> [ </symbol>
   {1}
 <symbol> ] </symbol>
-</term>
 """,
     "unary_op":
 """

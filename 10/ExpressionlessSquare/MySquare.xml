@@ -37,7 +37,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> x </identifier>
+<identifier> x </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -48,7 +48,7 @@
 </letStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> y </identifier>
+<identifier> y </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -59,7 +59,7 @@
 </letStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> size </identifier>
+<identifier> size </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -296,7 +296,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> size </identifier>
+<identifier> size </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -358,7 +358,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> size </identifier>
+<identifier> size </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -461,7 +461,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> y </identifier>
+<identifier> y </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -605,7 +605,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> y </identifier>
+<identifier> y </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -749,7 +749,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> x </identifier>
+<identifier> x </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -893,7 +893,7 @@
 </doStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> x </identifier>
+<identifier> x </identifier>
   <symbol> = </symbol>
 <expression>
 <term>

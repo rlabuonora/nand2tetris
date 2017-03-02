@@ -27,7 +27,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> square </identifier>
+<identifier> square </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -38,7 +38,7 @@
 </letStatement>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> direction </identifier>
+<identifier> direction </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -131,7 +131,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> exit </identifier>
+<identifier> exit </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -164,7 +164,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> key </identifier>
+<identifier> key </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -198,7 +198,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> exit </identifier>
+<identifier> exit </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -273,7 +273,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> direction </identifier>
+<identifier> direction </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -298,7 +298,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> direction </identifier>
+<identifier> direction </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -323,7 +323,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> direction </identifier>
+<identifier> direction </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -348,7 +348,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> direction </identifier>
+<identifier> direction </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
@@ -373,7 +373,7 @@
 <statements>
 <letStatement>
   <keyword> let </keyword>
-  <identifier> key </identifier>
+<identifier> key </identifier>
   <symbol> = </symbol>
 <expression>
 <term>
